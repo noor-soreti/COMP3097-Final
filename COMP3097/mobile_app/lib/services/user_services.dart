@@ -1,4 +1,3 @@
-import 'package:mongo_dart/mongo_dart.dart' show Db, DbCollection;
 import 'package:mobile_app/models/user_model.dart';
 
 import 'dart:async';
@@ -7,15 +6,18 @@ import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-void start() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final database =
-      openDatabase(join(await getDatabasesPath(), 'user_database.db'),
-          onCreate: (db, version) {
+Future<Database> test() async {
+  return openDatabase(join(await getDatabasesPath(), 'user_database.db'),
+      onCreate: (db, version) {
     return db.execute(
       'CREATE TABLE user(id INTEGER PRIMARY KEY, firstname TEXT, lastname TEXT, email TEXT)',
     );
   }, version: 1);
+}
+
+class UsersService {
+  // UsersService.ensureInitialized();
+  final database = test();
 
   // insert user to db
   Future<void> insertUser(User user) async {
@@ -49,6 +51,9 @@ void start() async {
   }
 
   // dummy data
-  var fakeUser = User.withoutId("Noor", "Said", "email@email.com");
-  insertUser(fakeUser);
+  void insertDummy() {
+    var fakeUser =
+        User.withoutId("soreti-noor", "Noor", "Said", "email@email.com");
+    insertUser(fakeUser);
+  }
 }
