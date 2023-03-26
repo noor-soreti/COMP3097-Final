@@ -1,8 +1,8 @@
 import 'package:mobile_app/models/user_model.dart';
+import 'package:mobile_app/services/test.dart';
 
 import 'dart:async';
 
-import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -16,7 +16,9 @@ Future<Database> test() async {
 }
 
 class UsersService {
-  // UsersService.ensureInitialized();
+
+
+  UsersService.ensureInitialized();
   final database = test();
 
   // insert user to db
@@ -52,8 +54,9 @@ class UsersService {
 
   // dummy data
   void insertDummy() {
-    var fakeUser =
-        User.withoutId("soreti-noor", "Noor", "Said", "email@email.com");
-    insertUser(fakeUser);
+    var u = User.withoutId(
+        "soreti-noor", "password", "Noor", "Said", "email@email.com");
+    // var fakeUser = User.withoutId(u);
+    insertUser(u);
   }
 }

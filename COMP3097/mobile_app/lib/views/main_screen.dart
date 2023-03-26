@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:mobile_app/views/home_screen.dart';
+import 'package:mobile_app/services/test.dart';
+import 'package:mobile_app/views/menu_screen.dart';
 import 'package:provider/provider.dart';
 import '../models/user_model.dart';
 import '../services/user_services.dart';
@@ -12,6 +15,8 @@ class MyAppState extends ChangeNotifier {
   var favourites = <String>[];
   var shoppingList = <String>[];
 
+  UsersService usersService = UsersService.ensureInitialized();
+
   void isFavourite(value) {
     if (!favourites.contains(value)) {
       favourites.add(value);
@@ -21,14 +26,24 @@ class MyAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void isRegisteredUser(username, password) {
+  bool isRegisteredUser(username, password) {
+    User u = User.usernameAndPassword(username, password);
+    SqliteDatabaseHelper sqliteDatabaseHelper = SqliteDatabaseHelper();
+
     if (userMap.containsKey(username)) {
-      print('Username `$username` already exists.');
+      // print('Username `$username` already exists.');
+      notifyListeners();
+      sqliteDatabaseHelper.getAllUsers().then((value) => {
+            for (var i in value) {print(i)}
+          });
+      return false;
     } else {
+      sqliteDatabaseHelper.insertUser(u);
       userMap.addAll({username.toString(): password.toString()});
-      print('Registered `$username`.');
+      // print('Registered `$username`.');
+      notifyListeners();
+      return true;
     }
-    notifyListeners();
   }
 
   bool userLogin(username, password) {
@@ -55,10 +70,11 @@ class _LoginPageState extends State<LoginPage> {
 
   // LoginPage(MyAppState appState);
 
+  @override
   void dispose() {
     myUsernameController.dispose();
     myPasswordController.dispose();
-    dispose();
+    super.dispose();
   }
 
   @override
@@ -113,8 +129,22 @@ class _LoginPageState extends State<LoginPage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => HomeScreen(
-                                username: myUsernameController.text)));
+                            builder: (context) =>
+                                SideMenu(username: myUsernameController.text)));
+                  } else {
+                    showDialog<String>(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: const Text('Oops'),
+                        content: const Text('Username or password incorrect'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, 'OK'),
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      ),
+                    );
                   }
                 }
               },
@@ -129,8 +159,25 @@ class _LoginPageState extends State<LoginPage> {
                 var passwordText = Text(myPasswordController.text);
                 // Validate returns true if the form is valid, or false otherwise.
                 if (formKey.currentState!.validate()) {
-                  appState.isRegisteredUser(
+                  var isRegistered = appState.isRegisteredUser(
                       usernameText.data, passwordText.data);
+                  showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: isRegistered
+                          ? const Text("Success")
+                          : const Text("dk"),
+                      content: isRegistered
+                          ? const Text("User has been registered")
+                          : const Text("User already exists"),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, 'OK'),
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    ),
+                  );
                 }
               },
               child: const Text('Register'),
@@ -145,20 +192,16 @@ class _LoginPageState extends State<LoginPage> {
 // class LoginPage extends StatelessWidget {
 //   final myUsernameController = TextEditingController();
 //   final myPasswordController = TextEditingController();
-
 //   // LoginPage(MyAppState appState);
-
 //   void dispose() {
 //     myUsernameController.dispose();
 //     myPasswordController.dispose();
 //     dispose();
 //   }
-
 //   @override
 //   Widget build(BuildContext context) {
 //     final formKey = GlobalKey<FormState>();
 //     var appState = context.watch<MyAppState>();
-
 //     return Form(
 //       key: formKey,
 //       child: Column(
@@ -247,20 +290,10 @@ class RegisterPage extends StatelessWidget {
 
   late final List<User> users;
 
-  UsersService u = UsersService();
-
-  String t() {
-    var test = u.users();
-
-    return "Register";
-  }
-
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text(
-        t(),
-      ),
+      child: Text("kdjfkd"),
     );
   }
 }
