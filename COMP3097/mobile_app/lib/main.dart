@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/services/shopping_list_services.dart';
+import 'package:mobile_app/services/user_services.dart';
+import 'package:mobile_app/views/login_screen.dart';
 import 'package:provider/provider.dart';
-import 'views/main_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,18 +17,24 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => MyAppState(),
-      child: MaterialApp(
-        title: 'Namer App',
-        theme: ThemeData(
-            useMaterial3: true,
-            colorScheme: ColorScheme.fromSeed(
-                seedColor: Color.fromRGBO(56, 160, 224, 0.438))),
-        home: Scaffold(
-          appBar: AppBar(
-            title: const Text("ShopU"),
+      create: (context) => UserService(),
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => UserService()),
+          ChangeNotifierProvider(create: (context) => ShoppingListService())
+        ],
+        child: MaterialApp(
+          title: 'Namer App',
+          theme: ThemeData(
+              useMaterial3: true,
+              colorScheme: ColorScheme.fromSeed(
+                  seedColor: Color.fromRGBO(56, 160, 224, 0.438))),
+          home: Scaffold(
+            appBar: AppBar(
+              title: const Text("ShopU"),
+            ),
+            body: LoginPage(),
           ),
-          body: LoginPage(),
         ),
       ),
     );

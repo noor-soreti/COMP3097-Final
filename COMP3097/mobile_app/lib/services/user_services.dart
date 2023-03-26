@@ -1,62 +1,53 @@
-import 'package:mobile_app/models/user_model.dart';
-import 'package:mobile_app/services/test.dart';
+import 'package:flutter/material.dart';
+import 'package:mobile_app/database/user_database.dart';
 
-import 'dart:async';
+import '../models/user_model.dart';
 
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
+class UserService with ChangeNotifier {
+  late User _currentUser;
+  User get currentUser => _currentUser;
 
-Future<Database> test() async {
-  return openDatabase(join(await getDatabasesPath(), 'user_database.db'),
-      onCreate: (db, version) {
-    return db.execute(
-      'CREATE TABLE user(id INTEGER PRIMARY KEY, firstname TEXT, lastname TEXT, email TEXT)',
-    );
-  }, version: 1);
-}
-
-class UsersService {
-
-
-  UsersService.ensureInitialized();
-  final database = test();
-
-  // insert user to db
-  Future<void> insertUser(User user) async {
-    final db = await database;
-    await db.insert('user', user.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace);
+  Future<String> getUser(String username) async {
+    String result = "ok";
+    try {
+      _currentUser = await UserDatabase.instance.getUser(username);
+      notifyListeners();
+    } catch (e) {
+      result = "Err";
+    }
+    return result;
   }
 
-  // retrieve all users from db
-  Future<List<User>> users() async {
-    final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('user');
-    return List.generate(maps.length, (index) {
-      return User.all(
-          id: maps[index]['id'],
-          firstname: maps[index]['firstname'],
-          lastname: maps[index]['lastname'],
-          email: maps[index]['email']);
-    });
+  Future<String> userExists(String username) async {
+    String result = "ok";
+    try {
+      await UserDatabase.instance.getUser(username);
+    } catch (e) {
+      result = "not exist";
+    }
+    return result;
   }
 
-  Future<void> updateUser(User user) async {
-    final db = await database;
-    await db
-        .update('user', user.toMap(), where: 'id = ?', whereArgs: [user.id]);
+  Future<String> updateUser(String password) async {
+    String result = "ok";
+    _currentUser.password = password;
+    notifyListeners();
+    try {
+      await UserDatabase.instance.updateUser(_currentUser);
+    } catch (e) {
+      result = "did not update";
+    }
+    return result;
   }
 
-  Future<void> deleteUser(int id) async {
-    final db = await database;
-    await db.delete('user', where: 'id = ?', whereArgs: [id]);
-  }
-
-  // dummy data
-  void insertDummy() {
-    var u = User.withoutId(
-        "soreti-noor", "password", "Noor", "Said", "email@email.com");
-    // var fakeUser = User.withoutId(u);
-    insertUser(u);
+  Future<String> createUser(User user) async {
+    String result = "ok";
+    try {
+      await UserDatabase.instance.createUser(user);
+    } catch (e) {
+      result = "did not create";
+    }
+    notifyListeners();
+    return result;
   }
 }

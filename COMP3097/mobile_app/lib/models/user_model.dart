@@ -1,48 +1,29 @@
-class User {
-  int? id;
-  String? username;
-  String? firstname;
-  String? lastname;
-  String? password;
-  String? email;
+const String usertable = 'user';
 
-  User() {}
+class UserFields {
+  static const String username = "test_username";
+  static const String password = "password";
 
-  User.required(
-      {required id,
-      required email,
-      required lastname,
-      required firstname,
-      required password,
-      required username}) {}
-
-  User.usernameAndPassword(this.username, this.password);
-
-  User.withoutId(
-      this.username, this.password, this.firstname, this.lastname, this.email);
-
-  User.all(
-      {this.id,
-      this.username,
-      this.password,
-      this.firstname,
-      this.lastname,
-      this.email});
-
-  factory User.fromMap(Map<String, dynamic> json) => User.required(
-      id: json["id"],
-      username: json["username"],
-      password: json["password"],
-      firstname: json["firstname"],
-      lastname: json["lastname"],
-      email: json["email"]);
-
-  Map<String, dynamic> toMap() {
-    return {'id': id, 'firstname': firstname, 'lastname': lastname};
-  }
-
-  @override
-  String toString() {
-    return username.toString();
-  }
+  static final List<String> allFields = [
+    username,
+    password,
+  ];
 }
+
+class User {
+  final String username;
+  String password;
+
+  User({
+    required this.username,
+    required this.password,
+  });
+
+  // convert User to map with String as key and Object and value
+  Map<String, Object?> toMap() =>
+      {UserFields.username: username, UserFields.password: password};
+
+// getting data back from db, convert from map to User obj
+  static User fromMap(Map<String, Object?> maps) => User(
+      username: maps[UserFields.username] as String,
+      password: maps[UserFields.password] as String);}

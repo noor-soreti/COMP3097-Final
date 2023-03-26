@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/views/main_screen.dart';
+import 'package:mobile_app/services/user_services.dart';
+import 'package:mobile_app/views/login_screen.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
@@ -10,14 +11,14 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-    var favourite = appState.favourites;
+    // var appState = context.watch<MyAppState>();
+    // var favourite = appState.favourites;
 
-    if (favourite.isEmpty) {
-      return Center(
-        child: Text("Nothing to show") ,
-      );
-    }
+    // if (favourite.isEmpty) {
+    //   return Center(
+    //     child: Text("Nothing to show"),
+    //   );
+    // }
 
     return ListView(
       children: [
@@ -25,12 +26,11 @@ class _HomeState extends State<Home> {
           padding: const EdgeInsets.all(20),
           child: Text('Home'),
         ),
-        for (var fav in favourite)
-        
-          ListTile(
-            leading: Icon(Icons.favorite),
-            title: Text("Home"),
-          )
+        // for (var fav in favourite)
+        //   ListTile(
+        //     leading: Icon(Icons.favorite),
+        //     title: Text("Home"),
+        //   )
       ],
     );
   }
