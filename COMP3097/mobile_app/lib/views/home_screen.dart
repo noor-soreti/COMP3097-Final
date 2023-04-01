@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/services/user_services.dart';
-import 'package:mobile_app/views/login_screen.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
@@ -11,14 +10,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    // var appState = context.watch<MyAppState>();
-    // var favourite = appState.favourites;
-
-    // if (favourite.isEmpty) {
-    //   return Center(
-    //     child: Text("Nothing to show"),
-    //   );
-    // }
+    var appState = context.watch<UserService>();
 
     return ListView(
       children: [

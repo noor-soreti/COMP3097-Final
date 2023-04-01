@@ -8,6 +8,7 @@ class ShoppingListFields {
 }
 
 class ShoppingList {
+  int? id;
   final String username;
   final String title;
   final DateTime dateTime;

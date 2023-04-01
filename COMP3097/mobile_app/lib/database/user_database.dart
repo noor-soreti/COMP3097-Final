@@ -11,7 +11,10 @@ class UserDatabase {
   Future _createDB(Database db, int version) async {
     await db.execute('''CREATE TABLE $usertable (
       ${UserFields.username} TEXT PRIMARY KEY NOT NULL,
-      ${UserFields.password} TEXT NOT NULL)
+      ${UserFields.password} TEXT NOT NULL,
+      ${UserFields.firstname} TEXT NOT NULL,
+      ${UserFields.lastname} TEXT NOT NULL,
+      ${UserFields.email} TEXT NOT NULL)
       ''');
   }
 
@@ -22,7 +25,7 @@ class UserDatabase {
   Future<Database> _initDB(String filename) async {
     final databasePath = await getDatabasesPath();
     final path = join(databasePath, filename);
-    await deleteDatabase(path);
+    // await deleteDatabase(path);
     return await openDatabase(path,
         version: 1, onCreate: _createDB, onConfigure: _onConfigure);
   }

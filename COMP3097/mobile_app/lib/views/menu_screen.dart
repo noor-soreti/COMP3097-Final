@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/services/user_services.dart';
 import 'package:mobile_app/views/home_screen.dart';
 import 'package:mobile_app/views/likes_screen.dart';
 import 'package:mobile_app/views/list_screen.dart';
