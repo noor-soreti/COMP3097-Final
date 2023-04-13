@@ -18,12 +18,6 @@ class ShoppingListService with ChangeNotifier {
     return 'ok';
   }
 
-  Future<String> addToList(String username) async {
-    String result = "ok";
-    print(_list);
-    return result;
-  }
-
   Future<String> deleteShoppingList(ShoppingList shoppingList) async {
     try {
       await UserDatabase.instance.deleteShoppingList(shoppingList);
@@ -41,6 +35,9 @@ class ShoppingListService with ChangeNotifier {
       return e.toString();
     }
     String results = await getShoppingList(shoppingList.username);
+    _list.forEach((element) {
+      print(element.title);
+    });
     return results;
   }
 }

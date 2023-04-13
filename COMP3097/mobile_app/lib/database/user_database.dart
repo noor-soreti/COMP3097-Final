@@ -30,7 +30,7 @@ class UserDatabase {
   Future<Database> _initDB(String filename) async {
     final databasePath = await getDatabasesPath();
     final path = join(databasePath, filename);
-    await deleteDatabase(path);
+    // await deleteDatabase(path);
     return await openDatabase(path,
         version: 1, onCreate: _createDB, onConfigure: _onConfigure);
   }
@@ -105,11 +105,6 @@ class UserDatabase {
     await db!.insert(listTable, shoppingList.toMap());
     return shoppingList;
   }
-
-  // Future<List<ShoppingList>> addToList(String username) async {
-  //       final db = await instance.database;
-
-  // }
 
   Future<List<ShoppingList>> getShoppingList(String username) async {
     final db = await instance.database;

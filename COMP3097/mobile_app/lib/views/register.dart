@@ -124,16 +124,3 @@ class _RegisterPageState extends State<RegisterPage> {
 }
 
 
-/*
-Form(
-        key: formKey,
-        child: Column(
-          children: [
-            Text("Register"),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: Text("hello"),
-            )
-          ],
-        ));
-*/

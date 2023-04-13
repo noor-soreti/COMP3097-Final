@@ -17,7 +17,9 @@ class _SearchState extends State<Search> {
     {"id": 2, "product": "avocado"},
     {"id": 3, "product": "cheese"},
     {"id": 4, "product": "olive oil"},
-    {"id": 5, "product": "grapes"}
+    {"id": 5, "product": "grapes"},
+    {"id": 6, "product": "cruton"},
+    {"id": 7, "product": "lettuce"}
   ];
 
   List<Map<String, dynamic>> _foundProduct = [];
@@ -81,11 +83,8 @@ class _SearchState extends State<Search> {
                       var list = ShoppingList(
                           username: currentUser.username,
                           title: _foundProduct[index]['product']);
-                      // appState
-                      //     .getShoppingList(currentUser.username)
-                      //     .then((value) => print(value));
 
-                      appState.addToList(currentUser.username);
+                      appState.createShoppingList(list);
                     },
                     child: Icon(Icons.add)),
                 title: Text(_foundProduct[index]["product"],

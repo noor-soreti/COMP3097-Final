@@ -30,13 +30,12 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
     var appState = context.watch<UserService>();
-    // print(appState.getUser("noor"));
 
     return Form(
       key: formKey,
       child: Column(
         children: [
-          Text('ShopU'),
+          Text('Sign In'),
           AppFormFields(
             controller: usernameController,
             validatorText: "Please enter username",
