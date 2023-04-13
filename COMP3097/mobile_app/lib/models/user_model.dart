@@ -1,11 +1,11 @@
 const String usertable = 'user';
 
 class UserFields {
-  static const String username = "test_username";
+  static const String username = "username";
   static const String password = "password";
-  static const String firstname = "Noor";
-  static const String lastname = "Said";
-  static const String email = "noorsaid";
+  static const String firstname = "firstname";
+  static const String lastname = "lastname";
+  static const String email = "email";
 
   static final List<String> allFields = [
     username,

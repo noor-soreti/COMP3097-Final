@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_app/models/shopping_list_model.dart';
 import 'package:mobile_app/services/shopping_list_services.dart';
-import 'package:mobile_app/views/login_screen.dart';
 import 'package:provider/provider.dart';
 
 class MyList extends StatefulWidget {
@@ -10,9 +10,12 @@ class MyList extends StatefulWidget {
 }
 
 class _MyListState extends State<MyList> {
+  ShoppingList list = ShoppingList(username: "noor", title: "Title");
+
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<ShoppingListService>();
+    // appState.createShoppingList(list).then((value) => print(value));
     return Column(
       children: [
         Expanded(

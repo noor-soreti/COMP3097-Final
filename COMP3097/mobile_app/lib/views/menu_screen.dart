@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/views/home_screen.dart';
-import 'package:mobile_app/views/likes_screen.dart';
 import 'package:mobile_app/views/list_screen.dart';
 import 'package:mobile_app/views/login_screen.dart';
 import 'package:mobile_app/views/search_screen.dart';
-import 'package:provider/provider.dart';
-
-import '../models/user_model.dart';
+import 'package:mobile_app/widget/dialogue_field.dart';
 
 class SideMenu extends StatefulWidget {
   SideMenu({super.key, required this.username});
@@ -20,16 +17,10 @@ class SideMenu extends StatefulWidget {
 class _SideMenuState extends State<SideMenu> {
   var selectedIndex = 0;
 
-  void test() async {
-    // List<User> t = await widget.uServ.users();
-    // for (var i in t) {
-    //   print(i);
-    // }
-  }
-
   @override
   Widget build(BuildContext context) {
     // var appState = context.watch<MyAppState>();
+    bool showTrailing = true;
 
     Widget page;
     switch (selectedIndex) {
@@ -38,12 +29,6 @@ class _SideMenuState extends State<SideMenu> {
         break;
       case 1:
         page = MyList();
-        try {
-          test();
-          print("eyyyyy");
-        } catch (e) {
-          print(e);
-        }
         break;
       case 2:
         page = Search();
@@ -84,9 +69,36 @@ class _SideMenuState extends State<SideMenu> {
                 onDestinationSelected: (value) {
                   setState(() {
                     selectedIndex = value;
-                    print(value);
                   });
                 },
+                trailing: IconButton(
+                    onPressed: () => {
+                          showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                    title: Text("Logout"),
+                                    content: Text(
+                                        "Are your sure you want to log out?"),
+                                    actions: <Widget>[
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.popUntil(
+                                                context,
+                                                (Route<dynamic> route) =>
+                                                    route.isFirst);
+                                          },
+                                          child: Text("Continue")),
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text("Cancel")),
+                                    ],
+                                  ))
+                        },
+                    icon: Icon(
+                      Icons.exit_to_app,
+                    )),
               ),
             ),
             Expanded(

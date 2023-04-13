@@ -14,7 +14,6 @@ class DialogueField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return AlertDialog(
       title: Text(alert),
       content: Text(content),

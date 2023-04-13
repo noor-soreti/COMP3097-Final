@@ -30,6 +30,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
     var appState = context.watch<UserService>();
+    // print(appState.getUser("noor"));
+
     return Form(
       key: formKey,
       child: Column(
@@ -49,12 +51,10 @@ class _LoginPageState extends State<LoginPage> {
               onPressed: () {
                 if (formKey.currentState!.validate()) {
                   var isLogged = appState
-                      .userExists(usernameController.text)
+                      .userLogin(usernameController.text, passwordController.text)
                       .then((value) => {
-                            print(value),
                             if (value == 'ok')
                               {
-                                print("printing"),
                                 appState
                                     .getUser(usernameController.text)
                                     .then((value) => {

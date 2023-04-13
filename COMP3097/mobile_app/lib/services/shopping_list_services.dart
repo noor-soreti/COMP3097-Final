@@ -8,12 +8,20 @@ class ShoppingListService with ChangeNotifier {
 
   Future<String> getShoppingList(String username) async {
     try {
-      _list = await UserDatabase.instance.getShoppingList(username);
+      _list = await UserDatabase.instance
+          .getShoppingList(username)
+          .then((value) => value);
       notifyListeners();
     } catch (e) {
       return e.toString();
     }
     return 'ok';
+  }
+
+  Future<String> addToList(String username) async {
+    String result = "ok";
+    print(_list);
+    return result;
   }
 
   Future<String> deleteShoppingList(ShoppingList shoppingList) async {

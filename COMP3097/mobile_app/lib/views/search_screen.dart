@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_app/models/shopping_list_model.dart';
 import 'package:mobile_app/services/shopping_list_services.dart';
 import 'package:mobile_app/services/user_services.dart';
 import 'package:mobile_app/views/login_screen.dart';
@@ -46,23 +47,24 @@ class _SearchState extends State<Search> {
     });
   }
 
-  void _edit() async {
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<UserService>();
+    var appState = context.watch<ShoppingListService>();
+    var ctex = context.watch<UserService>();
+    var currentUser = ctex.currentUser;
 
     return Column(
       children: [
         const SizedBox(
           height: 55,
         ),
-        TextField(
-          onChanged: (value) => _runFilter(value),
-          decoration: InputDecoration(
-              labelText: 'Search', suffixIcon: Icon(Icons.search)),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextField(
+            onChanged: (value) => _runFilter(value),
+            decoration: InputDecoration(
+                labelText: 'Search', suffixIcon: Icon(Icons.search)),
+          ),
         ),
         Expanded(
           child: ListView.builder(
@@ -71,23 +73,19 @@ class _SearchState extends State<Search> {
               key: ValueKey(_foundProduct[index]["id"]),
               color: Colors.blue,
               elevation: 4,
-              margin: const EdgeInsets.symmetric(vertical: 10),
+              margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
               child: ListTile(
                 leading: ElevatedButton(
-                    onPressed: () async {
-                      String username = await context
-                          .read()<UserService>()
-                          .currentUser
-                          .username;
-                      // print(username);
-                      // var userList = await context
-                      //     .read<ShoppingListService>()
-                      //     .getShoppingList(username);
-                      // if (userList == 'ok') {
-                      //   print("ok");
-                      // } else {
-                      //   print("not ");
-                      // }
+                    onPressed: () {
+                      print(_foundProduct[index]['id']);
+                      var list = ShoppingList(
+                          username: currentUser.username,
+                          title: _foundProduct[index]['product']);
+                      // appState
+                      //     .getShoppingList(currentUser.username)
+                      //     .then((value) => print(value));
+
+                      appState.addToList(currentUser.username);
                     },
                     child: Icon(Icons.add)),
                 title: Text(_foundProduct[index]["product"],

@@ -28,6 +28,33 @@ class UserService with ChangeNotifier {
     return result;
   }
 
+  Future<String> userLogin(String username, String password) async {
+    String result = "ok";
+    try {
+      await UserDatabase.instance
+          .getUsernamePassword(username, password)
+          .then((value) {
+        print(value);
+      });
+    } catch (e) {
+      result = "not exist";
+    }
+    return result;
+  }
+
+  Map<String, String> getUserInfo(String username) {
+    var userInfo = <String, String>{};
+    userInfo.addAll({
+      'username': currentUser.username,
+      'password': currentUser.password,
+      'first name': currentUser.firstname,
+      'last name': currentUser.lastname,
+      'email': currentUser.email
+    });
+    // print(userInfo['password']);
+    return userInfo;
+  }
+
   Future<String> updateUser(String password) async {
     String result = "ok";
     _currentUser.password = password;

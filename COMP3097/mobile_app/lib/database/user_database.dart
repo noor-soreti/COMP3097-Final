@@ -16,6 +16,11 @@ class UserDatabase {
       ${UserFields.lastname} TEXT NOT NULL,
       ${UserFields.email} TEXT NOT NULL)
       ''');
+
+    await db.execute('''CREATE TABLE $listTable (
+        ${ShoppingListFields.username} TEXT NOT NULL,
+        ${ShoppingListFields.title} TEXT NOT NULL,
+        FOREIGN KEY (${ShoppingListFields.username}) REFERENCES $usertable (${UserFields.username}))''');
   }
 
   Future _onConfigure(Database db) async {
@@ -25,7 +30,7 @@ class UserDatabase {
   Future<Database> _initDB(String filename) async {
     final databasePath = await getDatabasesPath();
     final path = join(databasePath, filename);
-    // await deleteDatabase(path);
+    await deleteDatabase(path);
     return await openDatabase(path,
         version: 1, onCreate: _createDB, onConfigure: _onConfigure);
   }
@@ -64,6 +69,19 @@ class UserDatabase {
     }
   }
 
+  Future<User> getUsernamePassword(String username, String password) async {
+    final db = await instance.database;
+    final maps = await db!.query(usertable,
+        columns: UserFields.allFields,
+        where: '${UserFields.username} = ? and ${UserFields.password} = ?',
+        whereArgs: [username, password]);
+    if (maps.isNotEmpty) {
+      return User.fromMap(maps.first);
+    } else {
+      throw Exception("$username not found");
+    }
+  }
+
   Future<List<User>> getAllUsers() async {
     final db = await instance.database;
     final result = await db!.query(usertable);
@@ -87,6 +105,11 @@ class UserDatabase {
     await db!.insert(listTable, shoppingList.toMap());
     return shoppingList;
   }
+
+  // Future<List<ShoppingList>> addToList(String username) async {
+  //       final db = await instance.database;
+
+  // }
 
   Future<List<ShoppingList>> getShoppingList(String username) async {
     final db = await instance.database;
