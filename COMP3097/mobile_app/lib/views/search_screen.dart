@@ -1,11 +1,9 @@
 import 'package:csv/csv.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_app/models/shopping_list_model.dart';
 import 'package:mobile_app/services/shopping_list_services.dart';
 import 'package:mobile_app/services/user_services.dart';
-import 'package:mobile_app/views/login_screen.dart';
 import 'package:provider/provider.dart';
 
 class Search extends StatefulWidget {
@@ -14,19 +12,7 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  List<Map<String, dynamic>> _searchValues = [
-    {"id": 1, "product": "tomato"},
-    {"id": 2, "product": "avocado"},
-    {"id": 3, "product": "cheese"},
-    {"id": 4, "product": "olive oil"},
-    {"id": 5, "product": "grapes"},
-    {"id": 6, "product": "cruton"},
-    {"id": 7, "product": "lettuce"}
-  ];
-
   List<Map<String, dynamic>> _values = [];
-
-  List<List<dynamic>> _data = [];
 
   List<Map<String, dynamic>> _foundProduct = [];
 
@@ -42,10 +28,10 @@ class _SearchState extends State<Search> {
   void loadCSV() async {
     try {
       var data = await rootBundle.loadString("assets/food.csv");
-      List<List<dynamic>> _listData = const CsvToListConverter().convert(data);
+      List<List<dynamic>> listData = const CsvToListConverter().convert(data);
 
       setState(() {
-        _listData.forEach((element) {
+        listData.forEach((element) {
           _values.add({"id": element[0], "product": element[1]});
         });
       });
