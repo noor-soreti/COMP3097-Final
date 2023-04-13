@@ -1,5 +1,7 @@
+import 'package:csv/csv.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mobile_app/models/shopping_list_model.dart';
 import 'package:mobile_app/services/shopping_list_services.dart';
 import 'package:mobile_app/services/user_services.dart';
@@ -22,14 +24,34 @@ class _SearchState extends State<Search> {
     {"id": 7, "product": "lettuce"}
   ];
 
+  List<Map<String, dynamic>> _values = [];
+
+  List<List<dynamic>> _data = [];
+
   List<Map<String, dynamic>> _foundProduct = [];
 
   List<Map<String, dynamic>> shoppingList = [];
 
   @override
   void initState() {
-    _foundProduct = _searchValues;
+    _foundProduct = _values;
+    loadCSV();
     super.initState();
+  }
+
+  void loadCSV() async {
+    try {
+      var data = await rootBundle.loadString("assets/food.csv");
+      List<List<dynamic>> _listData = const CsvToListConverter().convert(data);
+
+      setState(() {
+        _listData.forEach((element) {
+          _values.add({"id": element[0], "product": element[1]});
+        });
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   // var test = ShoppingListService();
@@ -37,9 +59,9 @@ class _SearchState extends State<Search> {
   void _runFilter(String enteredKeyword) {
     List<Map<String, dynamic>> results = [];
     if (enteredKeyword.isEmpty) {
-      results = _searchValues;
+      results = _values;
     } else {
-      results = _searchValues
+      results = _values
           .where(
               (user) => user["product"].toLowerCase().contains(enteredKeyword))
           .toList();

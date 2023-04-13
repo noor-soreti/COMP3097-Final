@@ -1,6 +1,7 @@
 import 'package:mobile_app/models/shopping_list_model.dart';
 import 'package:mobile_app/models/user_model.dart';
 import 'package:sqflite/sqflite.dart';
+// ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
 
 class UserDatabase {

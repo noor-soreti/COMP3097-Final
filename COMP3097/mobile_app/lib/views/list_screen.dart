@@ -4,7 +4,6 @@ import 'package:mobile_app/services/shopping_list_services.dart';
 import 'package:provider/provider.dart';
 
 import '../services/user_services.dart';
-import '../widget/button_field.dart';
 
 class MyList extends StatefulWidget {
   @override
@@ -14,12 +13,15 @@ class MyList extends StatefulWidget {
 class _MyListState extends State<MyList> {
   List<ShoppingList> userList = [];
   bool _edit = false;
+  List<List<dynamic>> _data = [];
 
   @override
   void initState() {
     print("List Screen - initState()");
     super.initState();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +36,12 @@ class _MyListState extends State<MyList> {
 
     initList();
 
-    void editBtn() {
-      setState(() {
-        // _edit = !_edit;
-        print(!_edit);
-      });
-    }
+    // void editBtn() {
+    //   setState(() {
+    //     // _edit = !_edit;
+    //     print(!_edit);
+    //   });
+    // }
 
     return Column(
       children: [
