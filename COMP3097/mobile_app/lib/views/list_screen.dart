@@ -1,3 +1,10 @@
+/// *******************************************************************************
+/// Project: recipe App
+/// Assignment: COMP3097 Final Assignment
+/// Author(s): Noor Ranya Said-101358069
+/// //         Hui Qiu -100675355
+///*******************************************************************************
+
 import 'package:flutter/material.dart';
 import 'package:mobile_app/models/shopping_list_model.dart';
 import 'package:mobile_app/services/shopping_list_services.dart';
@@ -12,16 +19,22 @@ class MyList extends StatefulWidget {
 
 class _MyListState extends State<MyList> {
   List<ShoppingList> userList = [];
+  List<double> currentTotal = [];
+  double subTotal = 0.00;
+  double total = 0.00;
+  double tax = 0;
   bool _edit = false;
-  List<List<dynamic>> _data = [];
+  int increment = 0;
 
-  @override
-  void initState() {
-    print("List Screen - initState()");
-    super.initState();
+  void getPrice() {
+    setState(() {});
   }
 
-
+  void getUserlist() {
+    setState(() {
+      userList;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,19 +42,12 @@ class _MyListState extends State<MyList> {
     var ctex = context.watch<UserService>();
     var currentUser = ctex.currentUser;
 
-    void initList() async {
-      await appState.getShoppingList(currentUser.username);
-      userList = appState.list;
-    }
+    appState.getShoppingList(currentUser.username).then((value) => {
+          userList = appState.list,
+        });
 
-    initList();
-
-    // void editBtn() {
-    //   setState(() {
-    //     // _edit = !_edit;
-    //     print(!_edit);
-    //   });
-    // }
+    tax = (total * .13);
+    subTotal = total + tax;
 
     return Column(
       children: [
@@ -55,9 +61,50 @@ class _MyListState extends State<MyList> {
               onPressed: () {
                 _edit = !_edit;
               },
-              // style:
             ),
           ],
+        ),
+        // WORKING ROW
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Text("SUBTOTAL",
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+                  SizedBox(
+                    width: 120,
+                  ),
+                  Text("\$${subTotal.toStringAsFixed(2)}",
+                      style: TextStyle(fontSize: 15)),
+                ],
+              ),
+              Row(
+                children: [
+                  Text("TOTAL",
+                      style:
+                          TextStyle(fontSize: 12, fontWeight: FontWeight.w300)),
+                  SizedBox(
+                    width: 167,
+                  ),
+                  Text("\$${total.toStringAsFixed(2)}"),
+                ],
+              ),
+              Row(
+                children: [
+                  Text("TAX (13% HST)",
+                      style:
+                          TextStyle(fontSize: 12, fontWeight: FontWeight.w300)),
+                  SizedBox(
+                    width: 117,
+                  ),
+                  Text("\$${tax.toStringAsFixed(2)}"),
+                ],
+              ),
+            ],
+          ),
         ),
         Expanded(
           child: userList.length > 0
@@ -68,6 +115,8 @@ class _MyListState extends State<MyList> {
                     return Container(
                       child: Card(
                           child: ListTile(
+                              leading:
+                                  Text("\$${userList[index].price.toString()}"),
                               title: Text(userList[index].title),
                               trailing: !_edit
                                   ? Icon(null)

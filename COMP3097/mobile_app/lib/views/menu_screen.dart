@@ -1,9 +1,14 @@
+/// *******************************************************************************
+/// Project: recipe App
+/// Assignment: COMP3097 Final Assignment
+/// Author(s): Noor Ranya Said-101358069
+/// //         Hui Qiu -100675355
+///*******************************************************************************
+
 import 'package:flutter/material.dart';
 import 'package:mobile_app/views/home_screen.dart';
 import 'package:mobile_app/views/list_screen.dart';
-import 'package:mobile_app/views/login_screen.dart';
 import 'package:mobile_app/views/search_screen.dart';
-import 'package:mobile_app/widget/dialogue_field.dart';
 
 class SideMenu extends StatefulWidget {
   SideMenu({super.key, required this.username});
@@ -33,9 +38,6 @@ class _SideMenuState extends State<SideMenu> {
       case 2:
         page = Search();
         break;
-      case 3:
-        page = Placeholder();
-        break;
       default:
         throw UnimplementedError('no widget for $selectedIndex');
     }
@@ -59,11 +61,7 @@ class _SideMenuState extends State<SideMenu> {
                   NavigationRailDestination(
                     icon: Icon(Icons.search),
                     label: Text('Search'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(Icons.favorite),
-                    label: Text('Likes'),
-                  ),
+                  )
                 ],
                 selectedIndex: selectedIndex,
                 onDestinationSelected: (value) {

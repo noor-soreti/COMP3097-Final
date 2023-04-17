@@ -1,3 +1,10 @@
+/// *******************************************************************************
+/// Project: recipe App
+/// Assignment: COMP3097 Final Assignment
+/// Author(s): Noor Ranya Said-101358069
+/// //         Hui Qiu -100675355
+///*******************************************************************************
+
 import 'package:mobile_app/models/shopping_list_model.dart';
 import 'package:mobile_app/models/user_model.dart';
 import 'package:sqflite/sqflite.dart';
@@ -21,6 +28,7 @@ class UserDatabase {
     await db.execute('''CREATE TABLE $listTable (
         ${ShoppingListFields.username} TEXT NOT NULL,
         ${ShoppingListFields.title} TEXT NOT NULL,
+        ${ShoppingListFields.price} INT NOT NULL,
         FOREIGN KEY (${ShoppingListFields.username}) REFERENCES $usertable (${UserFields.username}))''');
   }
 

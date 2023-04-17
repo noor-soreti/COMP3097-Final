@@ -1,3 +1,12 @@
+/// *******************************************************************************
+/// Project: recipe App
+/// Assignment: COMP3097 Final Assignment
+/// Author(s): Noor Ranya Said-101358069
+/// //         Hui Qiu -100675355
+///*******************************************************************************
+
+import 'dart:math';
+
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,9 +22,7 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   List<Map<String, dynamic>> _values = [];
-
   List<Map<String, dynamic>> _foundProduct = [];
-
   List<Map<String, dynamic>> shoppingList = [];
 
   @override
@@ -25,23 +32,23 @@ class _SearchState extends State<Search> {
     super.initState();
   }
 
+// Load data from csv file
   void loadCSV() async {
     try {
-      var data = await rootBundle.loadString("assets/food.csv");
+      var data = await rootBundle.loadString("assets/food-prices-headers.csv");
       List<List<dynamic>> listData = const CsvToListConverter().convert(data);
-
       setState(() {
-        listData.forEach((element) {
-          _values.add({"id": element[0], "product": element[1]});
-        });
+        for (var element in listData) {
+          _values.add(
+              {"id": element[0], "product": element[1], "price": element[2]});
+        }
       });
     } catch (e) {
       print(e);
     }
   }
 
-  // var test = ShoppingListService();
-
+// search function adds items to _foundProducts when selected
   void _runFilter(String enteredKeyword) {
     List<Map<String, dynamic>> results = [];
     if (enteredKeyword.isEmpty) {
@@ -76,6 +83,22 @@ class _SearchState extends State<Search> {
                 labelText: 'Search', suffixIcon: Icon(Icons.search)),
           ),
         ),
+        Row(
+          children: [
+            Text("SORT: "),
+            ElevatedButton(
+              onPressed: () => {
+                
+                
+              },
+              child: Text("Asc"),
+            ),
+            ElevatedButton(
+              onPressed: () => {},
+              child: Text("Desc"),
+            )
+          ],
+        ),
         Expanded(
           child: ListView.builder(
             itemCount: _foundProduct.length,
@@ -89,14 +112,20 @@ class _SearchState extends State<Search> {
                     onPressed: () {
                       print(_foundProduct[index]['id']);
                       var list = ShoppingList(
-                          username: currentUser.username,
-                          title: _foundProduct[index]['product']);
+                        username: currentUser.username,
+                        title: _foundProduct[index]['product'],
+                        price: _foundProduct[index]['price'],
+                      );
 
                       appState.createShoppingList(list);
                     },
                     child: Icon(Icons.add)),
                 title: Text(_foundProduct[index]["product"],
                     style: TextStyle(color: Colors.white)),
+                trailing: (Text(
+                  "\$${_foundProduct[index]['price'].toString()}",
+                  style: TextStyle(color: Colors.white),
+                )),
               ),
             ),
           ),

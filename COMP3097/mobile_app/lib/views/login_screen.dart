@@ -1,3 +1,10 @@
+/// *******************************************************************************
+/// Project: recipe App
+/// Assignment: COMP3097 Final Assignment
+/// Author(s): Noor Ranya Said-101358069
+/// //         Hui Qiu -100675355
+///*******************************************************************************
+
 import 'package:flutter/material.dart';
 import 'package:mobile_app/services/user_services.dart';
 import 'package:mobile_app/views/menu_screen.dart';
@@ -37,20 +44,22 @@ class _LoginPageState extends State<LoginPage> {
         children: [
           Text('Sign In'),
           AppFormFields(
-            controller: usernameController,
-            validatorText: "Please enter username",
-            hintText: "Enter username",
-          ),
+              controller: usernameController,
+              validatorText: "Please enter username",
+              hintText: "Enter username"),
           AppFormFields(
-              controller: passwordController,
-              validatorText: "Please enter password",
-              hintText: "Enter password"),
+            controller: passwordController,
+            validatorText: "Please enter password",
+            hintText: "Enter password",
+            obscureText: true,
+          ),
           ElevatedClassButton(
               childText: "Submit",
               onPressed: () {
                 if (formKey.currentState!.validate()) {
                   var isLogged = appState
-                      .userLogin(usernameController.text, passwordController.text)
+                      .userLogin(
+                          usernameController.text, passwordController.text)
                       .then((value) => {
                             if (value == 'ok')
                               {

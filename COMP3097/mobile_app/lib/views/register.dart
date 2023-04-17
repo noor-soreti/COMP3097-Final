@@ -1,3 +1,11 @@
+/// *******************************************************************************
+/// Project: recipe App
+/// Assignment: COMP3097 Final Assignment
+/// Author(s): Noor Ranya Said-101358069
+/// //         Hui Qiu -100675355
+///*******************************************************************************
+
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/database/user_database.dart';
 import 'package:mobile_app/services/user_services.dart';
@@ -63,11 +71,25 @@ class _RegisterPageState extends State<RegisterPage> {
                 controller: password,
                 hintText: "Enter password",
                 validatorText: "password",
+                obscureText: true,
               ),
-              AppFormFields(
-                controller: email,
-                hintText: "Enter email",
-                validatorText: "email",
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                child: TextFormField(
+                    controller: email,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(), hintText: "email"),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter email';
+                      } else if (!EmailValidator.validate(value)) {
+                        return "Invalid email";
+                      } else {
+                        print("bye");
+                        return null;
+                      }
+                    }),
               ),
               ElevatedClassButton(
                   childText: "Submit",
@@ -122,5 +144,3 @@ class _RegisterPageState extends State<RegisterPage> {
         ));
   }
 }
-
-

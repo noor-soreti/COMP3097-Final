@@ -1,3 +1,10 @@
+/// *******************************************************************************
+/// Project: recipe App
+/// Assignment: COMP3097 Final Assignment
+/// Author(s): Noor Ranya Said-101358069
+/// //         Hui Qiu -100675355
+///*******************************************************************************
+
 import 'package:flutter/foundation.dart';
 import 'package:mobile_app/database/user_database.dart';
 import 'package:mobile_app/models/shopping_list_model.dart';
@@ -5,6 +12,8 @@ import 'package:mobile_app/models/shopping_list_model.dart';
 class ShoppingListService with ChangeNotifier {
   List<ShoppingList> _list = [];
   List<ShoppingList> get list => _list;
+  List<double> _currentTotal = [];
+  List<double> get currentTotal => _currentTotal;
 
   Future<String> getShoppingList(String username) async {
     try {
@@ -21,6 +30,7 @@ class ShoppingListService with ChangeNotifier {
   Future<String> deleteShoppingList(ShoppingList shoppingList) async {
     try {
       await UserDatabase.instance.deleteShoppingList(shoppingList);
+      // _currentTotal = _currentTotal - shoppingList.price;
     } catch (e) {
       return e.toString();
     }
@@ -35,9 +45,6 @@ class ShoppingListService with ChangeNotifier {
       return e.toString();
     }
     String results = await getShoppingList(shoppingList.username);
-    _list.forEach((element) {
-      print(element.title);
-    });
     return results;
   }
 }
