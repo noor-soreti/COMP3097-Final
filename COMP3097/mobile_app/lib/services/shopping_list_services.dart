@@ -38,6 +38,8 @@ class ShoppingListService with ChangeNotifier {
     return 'ok';
   }
 
+  
+
   Future<String> deleteShoppingList(ShoppingList shoppingList) async {
     try {
       await UserDatabase.instance.deleteShoppingList(shoppingList);

@@ -73,11 +73,22 @@ class _SearchState extends State<Search> {
     });
   }
 
+  void sortAsc() {
+    _foundProduct.sort((a, b) => (a["price"]).compareTo(
+          b["price"],
+        ));
+    setState(() {
+      _values = _foundProduct;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<ShoppingListService>();
     var ctex = context.watch<UserService>();
     var currentUser = ctex.currentUser;
+
+    _foundProduct = _foundProduct;
 
     return Column(
       children: [
@@ -100,7 +111,7 @@ class _SearchState extends State<Search> {
               child: Text("Desc"),
             ),
             ElevatedButton(
-              onPressed: () => {sortDesc()},
+              onPressed: () => {sortAsc()},
               child: Text("Asc"),
             )
           ],
