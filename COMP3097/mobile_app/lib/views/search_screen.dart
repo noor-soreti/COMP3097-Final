@@ -64,6 +64,8 @@ class _SearchState extends State<Search> {
     });
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<ShoppingListService>();

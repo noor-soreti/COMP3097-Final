@@ -26,15 +26,7 @@ class _MyListState extends State<MyList> {
   bool _edit = false;
   int increment = 0;
 
-  void getPrice() {
-    setState(() {});
-  }
 
-  void getUserlist() {
-    setState(() {
-      userList;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +37,9 @@ class _MyListState extends State<MyList> {
     appState.getShoppingList(currentUser.username).then((value) => {
           userList = appState.list,
         });
+    appState
+        .getPrice(currentUser.username)
+        .then((value) => total = appState.currentTotal.reduce((value, element) => value + element));
 
     tax = (total * .13);
     subTotal = total + tax;

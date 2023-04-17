@@ -122,6 +122,18 @@ class UserDatabase {
     return results.map((e) => ShoppingList.fromMap((e))).toList();
   }
 
+  Future<List<double>> getPrice(String username) async {
+    final db = await instance.database;
+    final results = await db!.query(listTable,
+        where: '${ShoppingListFields.username} = ?', whereArgs: [username]);
+    final t = results.map((e) => ShoppingList.fromMap((e))).toList();
+    final List<double> priceList = [];
+    for (var i in t) {
+      priceList.add(i.price);
+    }
+    return priceList;
+  }
+
   Future<int> deleteShoppingList(ShoppingList shoppingList) async {
     final db = await instance.database;
     return db!.delete(listTable,

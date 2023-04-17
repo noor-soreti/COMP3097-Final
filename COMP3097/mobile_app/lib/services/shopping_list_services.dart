@@ -27,6 +27,17 @@ class ShoppingListService with ChangeNotifier {
     return 'ok';
   }
 
+  Future<String> getPrice(String username) async {
+    try {
+      _currentTotal =
+          await UserDatabase.instance.getPrice(username).then((value) => value);
+      notifyListeners();
+    } catch (e) {
+      return e.toString();
+    }
+    return 'ok';
+  }
+
   Future<String> deleteShoppingList(ShoppingList shoppingList) async {
     try {
       await UserDatabase.instance.deleteShoppingList(shoppingList);
