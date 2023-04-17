@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(
-        Duration(seconds: 3),
+        Duration(seconds: 5),
         () => Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -37,6 +37,12 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Container(
         color: Colors.white,
-        child: Text("Noor Ranya Said - 101358069 \nHui Qui - "));
+        child: Padding(
+          padding: const EdgeInsets.only(top: 200.0, left: 50),
+          child: Text(
+            "Noor Ranya Said - 101358069 \n\nHui Qui - 100675355",
+            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20, color: Colors.black, decoration: TextDecoration.none ),
+          ),
+        ));
   }
 }

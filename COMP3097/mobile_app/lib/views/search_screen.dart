@@ -64,7 +64,14 @@ class _SearchState extends State<Search> {
     });
   }
 
-  
+  void sortDesc() {
+    _foundProduct.sort((a, b) => (b["price"]).compareTo(
+          a["price"],
+        ));
+    setState(() {
+      _values = _foundProduct;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,15 +96,12 @@ class _SearchState extends State<Search> {
           children: [
             Text("SORT: "),
             ElevatedButton(
-              onPressed: () => {
-                
-                
-              },
-              child: Text("Asc"),
+              onPressed: () => {sortDesc()},
+              child: Text("Desc"),
             ),
             ElevatedButton(
-              onPressed: () => {},
-              child: Text("Desc"),
+              onPressed: () => {sortDesc()},
+              child: Text("Asc"),
             )
           ],
         ),

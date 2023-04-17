@@ -26,8 +26,6 @@ class _MyListState extends State<MyList> {
   bool _edit = false;
   int increment = 0;
 
-
-
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<ShoppingListService>();
@@ -37,9 +35,8 @@ class _MyListState extends State<MyList> {
     appState.getShoppingList(currentUser.username).then((value) => {
           userList = appState.list,
         });
-    appState
-        .getPrice(currentUser.username)
-        .then((value) => total = appState.currentTotal.reduce((value, element) => value + element));
+    appState.getPrice(currentUser.username).then((value) => total =
+        appState.currentTotal.reduce((value, element) => value + element));
 
     tax = (total * .13);
     subTotal = total + tax;
@@ -52,7 +49,9 @@ class _MyListState extends State<MyList> {
         Row(
           children: [
             TextButton(
-              child: _edit == false ? Text("Edit") : Text("Done"),
+              child: _edit == false
+                  ? Text("Edit", style: TextStyle(fontWeight: FontWeight.w600))
+                  : Text("Done"),
               onPressed: () {
                 _edit = !_edit;
               },
