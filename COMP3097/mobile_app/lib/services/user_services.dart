@@ -40,9 +40,7 @@ class UserService with ChangeNotifier {
     try {
       await UserDatabase.instance
           .getUsernamePassword(username, password)
-          .then((value) {
-        print(value);
-      });
+          .then((value) {});
     } catch (e) {
       result = "not exist";
     }
@@ -54,9 +52,9 @@ class UserService with ChangeNotifier {
     userInfo.addAll({
       'username': currentUser.username,
       'password': currentUser.password,
-      'first name': currentUser.firstname,
-      'last name': currentUser.lastname,
-      'email': currentUser.email
+      // 'first name': currentUser.firstname,
+      // 'last name': currentUser.lastname,
+      // 'email': currentUser.email
     });
     // print(userInfo['password']);
     return userInfo;

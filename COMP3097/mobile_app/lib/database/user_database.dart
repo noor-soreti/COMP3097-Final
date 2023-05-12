@@ -19,11 +19,11 @@ class UserDatabase {
   Future _createDB(Database db, int version) async {
     await db.execute('''CREATE TABLE $usertable (
       ${UserFields.username} TEXT PRIMARY KEY NOT NULL,
-      ${UserFields.password} TEXT NOT NULL,
-      ${UserFields.firstname} TEXT NOT NULL,
-      ${UserFields.lastname} TEXT NOT NULL,
-      ${UserFields.email} TEXT NOT NULL)
+      ${UserFields.password} TEXT NOT NULL)
       ''');
+    // ${UserFields.firstname} TEXT NOT NULL,
+    // ${UserFields.lastname} TEXT NOT NULL,
+    // ${UserFields.email} TEXT NOT NULL)
 
     await db.execute('''CREATE TABLE $listTable (
         ${ShoppingListFields.username} TEXT NOT NULL,

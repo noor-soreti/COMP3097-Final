@@ -95,11 +95,12 @@ class _RegisterPageState extends State<RegisterPage> {
                   childText: "Submit",
                   onPressed: () {
                     User newUser = User(
-                        username: username.text,
-                        password: password.text,
-                        firstname: firstname.text,
-                        lastname: lastname.text,
-                        email: email.text);
+                      username: username.text,
+                      password: password.text,
+                      // firstname: firstname.text,
+                      // lastname: lastname.text,
+                      // email: email.text
+                    );
                     if (formKey.currentState!.validate()) {
                       appState.userExists(username.text).then((value) => {
                             if (value != 'ok')
