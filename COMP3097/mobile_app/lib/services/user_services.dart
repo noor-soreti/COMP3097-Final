@@ -25,24 +25,26 @@ class UserService with ChangeNotifier {
     return result;
   }
 
-  Future<String> userExists(String username) async {
-    String result = "ok";
+  Future<String?> userExists(String username) async {
+    String? result = "ok";
     try {
       await UserDatabase.instance.getUser(username);
+      print("userExist - SUCCESS!");
     } catch (e) {
-      result = "not exist";
+      print("userExist - ERR");
+      result = "User does not exist";
     }
     return result;
   }
 
-  Future<String> userLogin(String username, String password) async {
-    String result = "ok";
+  Future<String?> userLogin(String username, String password) async {
+    String? result = "ok";
     try {
       await UserDatabase.instance
           .getUsernamePassword(username, password)
           .then((value) {});
     } catch (e) {
-      result = "not exist";
+      result = "User does not exist";
     }
     return result;
   }

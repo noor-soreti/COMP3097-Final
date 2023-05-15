@@ -1,10 +1,3 @@
-/// *******************************************************************************
-/// Project: recipe App
-/// Assignment: COMP3097 Final Assignment
-/// Author(s): Noor Ranya Said-101358069
-/// //         Hui Qiu -100675355
-///*******************************************************************************
-
 import 'package:flutter/material.dart';
 import 'package:mobile_app/services/user_services.dart';
 import 'package:mobile_app/views/home_screen.dart';
@@ -22,15 +15,15 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
+  // final usernameController = TextEditingController();
+  // final passwordController = TextEditingController();
 
-  @override
-  void dispose() {
-    usernameController.dispose();
-    passwordController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   usernameController.dispose();
+  //   passwordController.dispose();
+  //   super.dispose();
+  // }
 
   Future<String?> getUser(String data) async {
     String result = "ok";
@@ -44,28 +37,29 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<String?> _authLoginUser(BuildContext context, LoginData data) async {
-    Provider.of<UserService>(context, listen: false)
+    String? result = null;
+    await Provider.of<UserService>(context, listen: false)
         .userLogin(data.name, data.password)
         .then((value) => {
-              if (value != 'ok')
+              if (value != "ok") // username or password incorrect
                 {
-                  showDialog<String>(
-                      context: context,
-                      builder: (BuildContext context) => DialogueField(
-                            alert: "Oops",
-                            content: "Username or password incorrect",
-                            onPressed: () {
-                              // Navigator.pop(context);
-                            },
-                            btnText: 'ok',
-                          ))
+                  result = "Username or password incorrect"
+                  // showDialog<String>(
+                  //     context: context,
+                  //     builder: (BuildContext context) => DialogueField(
+                  //           alert: "Oops",
+                  //           content: "Username or password incorrect",
+                  //           onPressed: () {
+                  //             // Navigator.pop(context);
+                  //           },
+                  //           btnText: 'ok',
+                  //         ))
                 }
               else
                 {
                   Provider.of<UserService>(context, listen: false)
                       .getUser(data.name)
                       .then((value) => {
-                            print("hello"),
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (contex) =>
                                     SideMenu(username: data.name)))
@@ -73,63 +67,35 @@ class _LoginPageState extends State<LoginPage> {
                 }
             });
 
-    // .then((value) => {
-    //       if (value == 'ok')
-    //         {null}
-    //       else
-    //         {
-    //           showDialog<String>(
-    //               context: context,
-    //               builder: (BuildContext context) => DialogueField(
-    //                     alert: "Oops",
-    //                     content: "Username or password incorrect",
-    //                     onPressed: () {
-    //                       Navigator.pop(context);
-    //                     },
-    //                     btnText: 'ok',
-    //                   ))
-    //         }
-    //     }
-    // );
+    return result;
   }
 
   Future<String?> _authSignupUser(BuildContext context, SignupData data) async {
+    String? result = null;
     User newUser = User(
         password: data.password.toString(), username: data.name.toString());
-    Provider.of<UserService>(context, listen: false)
-        .userExists(newUser.username)
-        .then((value) => {
-              if (value != 'ok')
-                {
-                  Provider.of<UserService>(context, listen: false)
-                      .createUser(newUser)
-                      .then((value) => print("success"))
-                  //.then((value) => {
-                  //       showDialog<String>(
-                  //           context: context,
-                  //           builder: (BuildContext context) => DialogueField(
-                  //                 alert: "Success",
-                  //                 content: "You will be sent back to login",
-                  //                 onPressed: () {
-                  //                   var nav = Navigator.of(context);
-                  //                   nav.pop();
-                  //                 },
-                  //                 btnText: 'Return',
-                  //               ))
-                  //     })
-                }
-              else
-                {
-                  // showDialog<String>(
-                  //     context: context,
-                  //     builder: (BuildContext context) => DialogueField(
-                  //           alert: "Oops",
-                  //           content: "Username already exists",
-                  //           onPressed: () {},
-                  //           btnText: 'Ok',
-                  //         ))
-                }
-            });
+    try {
+      await Provider.of<UserService>(context, listen: false)
+          .userExists(newUser.username)
+          .then((value) => {
+                if (value != "ok") // if user does not exist, then create user
+                  {
+                    print("_authSignupUser - does not exist (SUCCESS)"),
+                    Provider.of<UserService>(context, listen: false)
+                        .createUser(newUser)
+                  }
+                else
+                  {
+                    print("_authSignupUser - exist (ERROR)"),
+                    result = "Username already in use"
+                  }
+              });
+    } catch (e) {
+      print("Error during user signup");
+      return "Whoops, something went wrong";
+    }
+    print("result: ${result}");
+    return result;
   }
 
   @override
@@ -149,7 +115,6 @@ class _LoginPageState extends State<LoginPage> {
       //     ),
       //   ));
       // },
-      loginAfterSignUp: false,
       onRecoverPassword: (_) => Future(() => getUser("username")),
       userType: LoginUserType.name,
       userValidator: (value) {
@@ -158,7 +123,9 @@ class _LoginPageState extends State<LoginPage> {
         }
         return null;
       },
-      messages: LoginMessages(signUpSuccess: "Your account is now registered!"),
+      messages: LoginMessages(
+        signUpSuccess: "Your account is now registered!",
+      ),
       // additionalSignupFields: [
       //   UserFormField(
       //       keyName: 'firstname',
