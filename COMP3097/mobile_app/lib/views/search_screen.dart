@@ -105,7 +105,7 @@ class _SearchState extends State<Search> {
         ),
         Row(
           children: [
-            Text("SORT: "),
+            Text("SORT (price): "),
             ElevatedButton(
               onPressed: () => {sortDesc()},
               child: Text("Desc"),
@@ -129,10 +129,10 @@ class _SearchState extends State<Search> {
                     onPressed: () {
                       print(_foundProduct[index]['id']);
                       var list = ShoppingList(
-                        username: currentUser.username,
-                        title: _foundProduct[index]['product'],
-                        price: _foundProduct[index]['price'],
-                      );
+                          username: currentUser.username,
+                          title: _foundProduct[index]['product'],
+                          price: _foundProduct[index]['price'],
+                          quantity: _foundProduct[index]['qty']);
 
                       appState.createShoppingList(list);
                     },
