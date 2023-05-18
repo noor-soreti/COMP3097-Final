@@ -1,10 +1,3 @@
-/// *******************************************************************************
-/// Project: recipe App
-/// Assignment: COMP3097 Final Assignment
-/// Author(s): Noor Ranya Said-101358069
-/// //         Hui Qiu -100675355
-///*******************************************************************************
-
 import 'package:flutter/foundation.dart';
 import 'package:mobile_app/database/user_database.dart';
 import 'package:mobile_app/models/shopping_list_model.dart';
@@ -20,6 +13,9 @@ class ShoppingListService with ChangeNotifier {
       _list = await UserDatabase.instance
           .getShoppingList(username)
           .then((value) => value);
+      for (var element in _list) {
+        // print(element.quantity);
+      }
       notifyListeners();
     } catch (e) {
       return e.toString();
@@ -33,12 +29,11 @@ class ShoppingListService with ChangeNotifier {
           await UserDatabase.instance.getPrice(username).then((value) => value);
       notifyListeners();
     } catch (e) {
+      print("getPrice() - ERR");
       return e.toString();
     }
     return 'ok';
   }
-
-  
 
   Future<String> deleteShoppingList(ShoppingList shoppingList) async {
     try {

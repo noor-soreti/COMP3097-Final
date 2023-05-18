@@ -1,10 +1,3 @@
-/// *******************************************************************************
-/// Project: recipe App
-/// Assignment: COMP3097 Final Assignment
-/// Author(s): Noor Ranya Said-101358069
-/// //         Hui Qiu -100675355
-///*******************************************************************************
-
 import 'package:flutter/material.dart';
 import 'package:mobile_app/services/user_services.dart';
 import 'package:provider/provider.dart';
@@ -18,15 +11,10 @@ class _HomeState extends State<Home> {
   bool _edit = false;
 
   @override
-  void initState() {
-    print("Home Screen - initState()");
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     var appState = context.watch<UserService>();
-    var userInfo = appState.getUserInfo(appState.currentUser.username);
+    var currentUser = appState.currentUser.username;
+    var userInfo = appState.getUserInfo(currentUser);
     var keys = userInfo.keys.toList();
 
     return Column(
@@ -37,10 +25,13 @@ class _HomeState extends State<Home> {
         Row(
           children: [
             TextButton(
-              child: _edit == false ? Text("Edit") : Text("Done"),
+              child: _edit == false
+                  ? Text("Edit", style: TextStyle(fontWeight: FontWeight.w600))
+                  : Text("Done"),
               onPressed: () {
-                _edit = !_edit;
-                print(_edit);
+                setState(() {
+                  _edit = !_edit;
+                });
               },
             ),
           ],

@@ -1,9 +1,3 @@
-/// *******************************************************************************
-/// Project: recipe App
-/// Assignment: COMP3097 Final Assignment
-/// Author(s): Noor Ranya Said-101358069
-/// //         Hui Qiu -100675355
-///*******************************************************************************
 
 import 'package:flutter/material.dart';
 

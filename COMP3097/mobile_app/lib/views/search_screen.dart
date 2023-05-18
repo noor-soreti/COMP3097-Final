@@ -1,9 +1,4 @@
-/// *******************************************************************************
-/// Project: recipe App
-/// Assignment: COMP3097 Final Assignment
-/// Author(s): Noor Ranya Said-101358069
-/// //         Hui Qiu -100675355
-///*******************************************************************************
+
 
 import 'dart:math';
 
@@ -39,8 +34,11 @@ class _SearchState extends State<Search> {
       List<List<dynamic>> listData = const CsvToListConverter().convert(data);
       setState(() {
         for (var element in listData) {
-          _values.add(
-              {"id": element[0], "product": element[1], "price": element[2]});
+          _values.add({
+            "id": element[0],
+            "product": element[1],
+            "price": element[2],
+          });
         }
       });
     } catch (e) {
@@ -130,9 +128,9 @@ class _SearchState extends State<Search> {
                       print(_foundProduct[index]['id']);
                       var list = ShoppingList(
                           username: currentUser.username,
-                          title: _foundProduct[index]['product'],
+                          product: _foundProduct[index]['product'],
                           price: _foundProduct[index]['price'],
-                          quantity: _foundProduct[index]['qty']);
+                          quantity: 0);
 
                       appState.createShoppingList(list);
                     },

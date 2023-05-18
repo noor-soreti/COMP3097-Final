@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/services/user_services.dart';
-import 'package:mobile_app/views/home_screen.dart';
+import 'package:mobile_app/views/profile.dart';
 import 'package:mobile_app/views/menu_screen.dart';
 import 'package:mobile_app/widget/dialogue_field.dart';
 import 'package:provider/provider.dart';

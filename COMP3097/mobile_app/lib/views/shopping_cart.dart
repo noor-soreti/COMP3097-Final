@@ -1,10 +1,3 @@
-/// *******************************************************************************
-/// Project: recipe App
-/// Assignment: COMP3097 Final Assignment
-/// Author(s): Noor Ranya Said-101358069
-/// //         Hui Qiu -100675355
-///*******************************************************************************
-
 import 'package:flutter/material.dart';
 import 'package:mobile_app/models/shopping_list_model.dart';
 import 'package:mobile_app/services/shopping_list_services.dart';
@@ -19,12 +12,17 @@ class MyList extends StatefulWidget {
 
 class _MyListState extends State<MyList> {
   List<ShoppingList> userList = [];
-  List<double> currentTotal = [];
+  // List<double> currentTotal = [];
   double subTotal = 0.00;
   double total = 0.00;
   double tax = 0;
   bool _edit = false;
   int increment = 0;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +109,7 @@ class _MyListState extends State<MyList> {
                           child: ListTile(
                               leading:
                                   Text("\$${userList[index].price.toString()}"),
-                              title: Text(userList[index].title),
+                              title: Text(userList[index].product),
                               trailing: !_edit
                                   ? Icon(null)
                                   : IconButton(

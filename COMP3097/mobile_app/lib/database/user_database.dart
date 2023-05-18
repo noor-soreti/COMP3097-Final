@@ -1,14 +1,6 @@
-/// *******************************************************************************
-/// Project: recipe App
-/// Assignment: COMP3097 Final Assignment
-/// Author(s): Noor Ranya Said-101358069
-/// //         Hui Qiu -100675355
-///*******************************************************************************
-
 import 'package:mobile_app/models/shopping_list_model.dart';
 import 'package:mobile_app/models/user_model.dart';
 import 'package:sqflite/sqflite.dart';
-// ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
 
 class UserDatabase {
@@ -27,8 +19,9 @@ class UserDatabase {
 
     await db.execute('''CREATE TABLE $listTable (
         ${ShoppingListFields.username} TEXT NOT NULL,
-        ${ShoppingListFields.title} TEXT NOT NULL,
+        ${ShoppingListFields.product} TEXT NOT NULL,
         ${ShoppingListFields.price} INT NOT NULL,
+        ${ShoppingListFields.quantity} INT NOT NULL,
         FOREIGN KEY (${ShoppingListFields.username}) REFERENCES $usertable (${UserFields.username}))''');
   }
 
@@ -109,8 +102,18 @@ class UserDatabase {
         where: '${UserFields.username} = ?', whereArgs: [username]);
   }
 
+  // SHOPPING LIST
+
   Future<ShoppingList> createShoppingList(ShoppingList shoppingList) async {
     final db = await instance.database;
+    var test = await getShoppingList(shoppingList.username);
+    for (var i in test) {
+      // check duplicate value
+      if (shoppingList.product == i.product) {
+        shoppingList.quantity = i.quantity + 1;
+      }
+    }
+    print(shoppingList.quantity);
     await db!.insert(listTable, shoppingList.toMap());
     return shoppingList;
   }
@@ -119,6 +122,7 @@ class UserDatabase {
     final db = await instance.database;
     final results = await db!.query(listTable,
         where: '${ShoppingListFields.username} = ?', whereArgs: [username]);
+
     return results.map((e) => ShoppingList.fromMap((e))).toList();
   }
 
@@ -126,7 +130,9 @@ class UserDatabase {
     final db = await instance.database;
     final results = await db!.query(listTable,
         where: '${ShoppingListFields.username} = ?', whereArgs: [username]);
+
     final t = results.map((e) => ShoppingList.fromMap((e))).toList();
+
     final List<double> priceList = [];
     for (var i in t) {
       priceList.add(i.price);
@@ -138,7 +144,7 @@ class UserDatabase {
     final db = await instance.database;
     return db!.delete(listTable,
         where:
-            "${ShoppingListFields.username} = ? and ${ShoppingListFields.title} = ?",
-        whereArgs: [shoppingList.username, shoppingList.title]);
+            "${ShoppingListFields.username} = ? and ${ShoppingListFields.product} = ?",
+        whereArgs: [shoppingList.username, shoppingList.product]);
   }
 }
