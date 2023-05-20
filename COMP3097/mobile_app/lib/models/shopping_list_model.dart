@@ -1,31 +1,37 @@
 const String listTable = 'list';
 
-class ShoppingListFields {
+class ItemFields {
   static const String username = "username";
-  static const String product = "product";
-  static const String price = "price";
-  static const String quantity = "qty";
-  static final List<Object> allFields = [username, product, price, quantity];
+  static const name = "name";
+  static const price = "price";
+  static const quantity = "qty";
+  static final List<String> allFields = [username, name, price, quantity];
 }
 
-class ShoppingList {
+class Item {
   int? id;
-  int quantity;
-  String product;
-  double price;
+  final String username;
+  late final int quantity;
+  final String name;
+  final double price;
 
-  ShoppingList(
-      {required this.product, required this.price, required this.quantity});
+  Item(
+      {required this.username,
+      required this.name,
+      required this.price,
+      required this.quantity});
 
-  Map<Object, Object?> toMap() => {
-        ShoppingListFields.product: product,
-        ShoppingListFields.price: price,
-        ShoppingListFields.quantity: quantity
+  Map<String, Object?> toMap() => {
+        ItemFields.username: username,
+        ItemFields.name: name,
+        ItemFields.price: price,
+        ItemFields.quantity: quantity
       };
 
-  static ShoppingList fromMap(Map<String, Object?> maps) => ShoppingList(
-        product: maps[ShoppingListFields.product] as String,
-        price: maps[ShoppingListFields.price] as double,
-        quantity: maps[ShoppingListFields.quantity] as int,
+  static Item fromMap(Map<String, Object?> maps) => Item(
+        username: maps[ItemFields.username] as String,
+        name: maps[ItemFields.name] as String,
+        price: maps[ItemFields.price] as double,
+        quantity: maps[ItemFields.quantity] as int,
       );
 }

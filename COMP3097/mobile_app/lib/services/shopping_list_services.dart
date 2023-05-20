@@ -3,8 +3,8 @@ import 'package:mobile_app/database/user_database.dart';
 import 'package:mobile_app/models/shopping_list_model.dart';
 
 class ShoppingListService with ChangeNotifier {
-  List<ShoppingList> _list = [];
-  List<ShoppingList> get list => _list;
+  List<Item> _list = [];
+  List<Item> get list => _list;
   List<double> _currentTotal = [];
   List<double> get currentTotal => _currentTotal;
 
@@ -35,7 +35,7 @@ class ShoppingListService with ChangeNotifier {
     return 'ok';
   }
 
-  Future<String> deleteShoppingList(ShoppingList shoppingList) async {
+  Future<String> deleteShoppingList(Item shoppingList) async {
     try {
       await UserDatabase.instance.deleteShoppingList(shoppingList);
       // _currentTotal = _currentTotal - shoppingList.price;
@@ -46,7 +46,7 @@ class ShoppingListService with ChangeNotifier {
     return results;
   }
 
-  Future<String> createShoppingList(ShoppingList shoppingList) async {
+  Future<String> createShoppingList(Item shoppingList) async {
     try {
       await UserDatabase.instance.createShoppingList(shoppingList);
     } catch (e) {

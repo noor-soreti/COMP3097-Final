@@ -11,7 +11,7 @@ class MyList extends StatefulWidget {
 }
 
 class _MyListState extends State<MyList> {
-  List<ShoppingList> userList = [];
+  List<Item> userList = [];
   // List<double> currentTotal = [];
   double subTotal = 0.00;
   double total = 0.00;
@@ -109,7 +109,7 @@ class _MyListState extends State<MyList> {
                           child: ListTile(
                               leading:
                                   Text("\$${userList[index].price.toString()}"),
-                              title: Text(userList[index].product),
+                              title: Text(userList[index].name),
                               trailing: !_edit
                                   ? Icon(null)
                                   : IconButton(

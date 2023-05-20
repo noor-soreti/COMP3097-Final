@@ -1,5 +1,3 @@
-
-
 import 'dart:math';
 
 import 'package:csv/csv.dart';
@@ -126,9 +124,9 @@ class _SearchState extends State<Search> {
                 leading: ElevatedButton(
                     onPressed: () {
                       print(_foundProduct[index]['id']);
-                      var list = ShoppingList(
+                      var list = Item(
                           username: currentUser.username,
-                          product: _foundProduct[index]['product'],
+                          name: _foundProduct[index]['product'],
                           price: _foundProduct[index]['price'],
                           quantity: 0);
 

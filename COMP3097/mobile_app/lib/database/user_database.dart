@@ -18,11 +18,11 @@ class UserDatabase {
     // ${UserFields.email} TEXT NOT NULL)
 
     await db.execute('''CREATE TABLE $listTable (
-        ${ShoppingListFields.username} TEXT NOT NULL,
-        ${ShoppingListFields.product} TEXT NOT NULL,
-        ${ShoppingListFields.price} INT NOT NULL,
-        ${ShoppingListFields.quantity} INT NOT NULL,
-        FOREIGN KEY (${ShoppingListFields.username}) REFERENCES $usertable (${UserFields.username}))''');
+        ${ItemFields.username} TEXT NOT NULL,
+        ${ItemFields.name} TEXT NOT NULL,
+        ${ItemFields.price} INT NOT NULL,
+        ${ItemFields.quantity} INT NOT NULL,
+        FOREIGN KEY (${ItemFields.username}) REFERENCES $usertable (${UserFields.username}))''');
   }
 
   Future _onConfigure(Database db) async {
@@ -104,12 +104,12 @@ class UserDatabase {
 
   // SHOPPING LIST
 
-  Future<ShoppingList> createShoppingList(ShoppingList shoppingList) async {
+  Future<Item> createShoppingList(Item shoppingList) async {
     final db = await instance.database;
     var test = await getShoppingList(shoppingList.username);
     for (var i in test) {
       // check duplicate value
-      if (shoppingList.product == i.product) {
+      if (shoppingList.name == i.name) {
         shoppingList.quantity = i.quantity + 1;
       }
     }
@@ -118,20 +118,20 @@ class UserDatabase {
     return shoppingList;
   }
 
-  Future<List<ShoppingList>> getShoppingList(String username) async {
+  Future<List<Item>> getShoppingList(String username) async {
     final db = await instance.database;
     final results = await db!.query(listTable,
-        where: '${ShoppingListFields.username} = ?', whereArgs: [username]);
+        where: '${ItemFields.username} = ?', whereArgs: [username]);
 
-    return results.map((e) => ShoppingList.fromMap((e))).toList();
+    return results.map((e) => Item.fromMap((e))).toList();
   }
 
   Future<List<double>> getPrice(String username) async {
     final db = await instance.database;
     final results = await db!.query(listTable,
-        where: '${ShoppingListFields.username} = ?', whereArgs: [username]);
+        where: '${ItemFields.username} = ?', whereArgs: [username]);
 
-    final t = results.map((e) => ShoppingList.fromMap((e))).toList();
+    final t = results.map((e) => Item.fromMap((e))).toList();
 
     final List<double> priceList = [];
     for (var i in t) {
@@ -140,11 +140,10 @@ class UserDatabase {
     return priceList;
   }
 
-  Future<int> deleteShoppingList(ShoppingList shoppingList) async {
+  Future<int> deleteShoppingList(Item shoppingList) async {
     final db = await instance.database;
     return db!.delete(listTable,
-        where:
-            "${ShoppingListFields.username} = ? and ${ShoppingListFields.product} = ?",
-        whereArgs: [shoppingList.username, shoppingList.product]);
+        where: "${ItemFields.username} = ? and ${ItemFields.name} = ?",
+        whereArgs: [shoppingList.username, shoppingList.name]);
   }
 }
