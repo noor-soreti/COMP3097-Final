@@ -104,7 +104,7 @@ class UserDatabase {
 
   // SHOPPING LIST
 
-  Future<Item> createShoppingList(Item shoppingList) async {
+  Future<ShoppingList> createShoppingList(ShoppingList shoppingList) async {
     final db = await instance.database;
     var test = await getShoppingList(shoppingList.username);
     for (var i in test) {
@@ -118,12 +118,12 @@ class UserDatabase {
     return shoppingList;
   }
 
-  Future<List<Item>> getShoppingList(String username) async {
+  Future<List<ShoppingList>> getShoppingList(String username) async {
     final db = await instance.database;
     final results = await db!.query(listTable,
         where: '${ItemFields.username} = ?', whereArgs: [username]);
 
-    return results.map((e) => Item.fromMap((e))).toList();
+    return results.map((e) => ShoppingList.fromMap((e))).toList();
   }
 
   Future<List<double>> getPrice(String username) async {
@@ -131,7 +131,7 @@ class UserDatabase {
     final results = await db!.query(listTable,
         where: '${ItemFields.username} = ?', whereArgs: [username]);
 
-    final t = results.map((e) => Item.fromMap((e))).toList();
+    final t = results.map((e) => ShoppingList.fromMap((e))).toList();
 
     final List<double> priceList = [];
     for (var i in t) {
@@ -140,7 +140,7 @@ class UserDatabase {
     return priceList;
   }
 
-  Future<int> deleteShoppingList(Item shoppingList) async {
+  Future<int> deleteShoppingList(ShoppingList shoppingList) async {
     final db = await instance.database;
     return db!.delete(listTable,
         where: "${ItemFields.username} = ? and ${ItemFields.name} = ?",

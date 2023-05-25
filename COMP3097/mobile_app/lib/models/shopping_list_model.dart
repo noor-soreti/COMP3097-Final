@@ -1,3 +1,5 @@
+import 'package:drift/drift.dart';
+
 const String listTable = 'list';
 
 class ItemFields {
@@ -8,14 +10,14 @@ class ItemFields {
   static final List<String> allFields = [username, name, price, quantity];
 }
 
-class Item {
+class ShoppingList {
   int? id;
   final String username;
   late final int quantity;
   final String name;
   final double price;
 
-  Item(
+  ShoppingList(
       {required this.username,
       required this.name,
       required this.price,
@@ -28,7 +30,7 @@ class Item {
         ItemFields.quantity: quantity
       };
 
-  static Item fromMap(Map<String, Object?> maps) => Item(
+  static ShoppingList fromMap(Map<String, Object?> maps) => ShoppingList(
         username: maps[ItemFields.username] as String,
         name: maps[ItemFields.name] as String,
         price: maps[ItemFields.price] as double,

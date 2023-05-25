@@ -11,7 +11,7 @@ class MyList extends StatefulWidget {
 }
 
 class _MyListState extends State<MyList> {
-  List<Item> userList = [];
+  List<ShoppingList> userList = [];
   // List<double> currentTotal = [];
   double subTotal = 0.00;
   double total = 0.00;

@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/database/database.dart';
 import 'package:mobile_app/services/shopping_list_services.dart';
+import 'package:mobile_app/services/todo_service.dart';
 import 'package:mobile_app/services/user_services.dart';
 import 'package:mobile_app/views/login_screen.dart';
 import 'package:provider/provider.dart';
 
+late MyDatabase database;
+
 void main() {
+  database = MyDatabase();
   runApp(MyApp());
 }
 

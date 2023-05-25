@@ -124,7 +124,7 @@ class _SearchState extends State<Search> {
                 leading: ElevatedButton(
                     onPressed: () {
                       print(_foundProduct[index]['id']);
-                      var list = Item(
+                      var list = ShoppingList(
                           username: currentUser.username,
                           name: _foundProduct[index]['product'],
                           price: _foundProduct[index]['price'],

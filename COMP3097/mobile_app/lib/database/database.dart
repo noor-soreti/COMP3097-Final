@@ -1,25 +1,26 @@
 import 'dart:io';
-
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
-part 'filename.g.dart';
+import 'package:mobile_app/database/tables.dart';
 
-// Generate table called 'testing'
-class Testing extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  TextColumn get title => text()();
-  TextColumn get description => text()();
-}
+part 'database.g.dart';
 
-@DriftDatabase(tables: [Testing])
-class TestDatabase extends _$TestDatabase {
-  TestDatabase() : super(_openConnection());
+// For each table you've specified in the @DriftDatabase annotation on your database class, a corresponding getter for a table will be generated (can be used to run statements)
+@DriftDatabase(tables: [ItemDB])
+class MyDatabase extends _$MyDatabase {
+  MyDatabase() : super(_openConnection());
 
+  // Bump this number whenever change or add a table definition.
   @override
   int get schemaVersion => 1;
+
+  Future<void> insertItems() async{
+
+  }
+
 }
 
 LazyDatabase _openConnection() {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/database/database.dart';
 import 'package:mobile_app/database/user_database.dart';
 
 import '../models/user_model.dart';
@@ -6,6 +7,7 @@ import '../models/user_model.dart';
 class UserService with ChangeNotifier {
   late User _currentUser;
   User get currentUser => _currentUser;
+
 
   Future<String> getUser(String username) async {
     String result = "ok";
