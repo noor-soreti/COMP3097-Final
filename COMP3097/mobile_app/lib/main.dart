@@ -24,7 +24,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) => UserService()),
-          ChangeNotifierProvider(create: (context) => ShoppingListService())
+          ChangeNotifierProvider(create: (context) => ShoppingListService()),
+          ChangeNotifierProvider(create: (context) => TodoService())
         ],
         child: MaterialApp(
           title: 'ShopU',

@@ -12,10 +12,10 @@ class ItemFields {
 
 class ShoppingList {
   int? id;
-  final String username;
-  late final int quantity;
-  final String name;
-  final double price;
+  String username;
+  int quantity;
+  String name;
+  double price;
 
   ShoppingList(
       {required this.username,

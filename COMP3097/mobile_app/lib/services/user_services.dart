@@ -5,9 +5,8 @@ import 'package:mobile_app/database/user_database.dart';
 import '../models/user_model.dart';
 
 class UserService with ChangeNotifier {
-  late User _currentUser;
-  User get currentUser => _currentUser;
-
+  late UserModel _currentUser;
+  UserModel get currentUser => _currentUser;
 
   Future<String> getUser(String username) async {
     String result = "ok";
@@ -69,7 +68,7 @@ class UserService with ChangeNotifier {
     return result;
   }
 
-  Future<String> createUser(User user) async {
+  Future<String> createUser(UserModel user) async {
     String result = "ok";
     try {
       await UserDatabase.instance.createUser(user);

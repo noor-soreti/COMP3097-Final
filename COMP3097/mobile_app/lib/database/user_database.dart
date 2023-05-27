@@ -52,45 +52,46 @@ class UserDatabase {
     }
   }
 
-  Future<User> createUser(User user) async {
+  Future<UserModel> createUser(UserModel user) async {
     final db = await instance.database; // get connection to database
     await db!.insert(usertable, user.toMap());
     return user;
   }
 
-  Future<User> getUser(String username) async {
+  Future<UserModel> getUser(String username) async {
     final db = await instance.database;
     final maps = await db!.query(usertable,
         columns: UserFields.allFields,
         where: '${UserFields.username} = ?',
         whereArgs: [username]);
     if (maps.isNotEmpty) {
-      return User.fromMap(maps.first);
+      return UserModel.fromMap(maps.first);
     } else {
       throw Exception("$username not found");
     }
   }
 
-  Future<User> getUsernamePassword(String username, String password) async {
+  Future<UserModel> getUsernamePassword(
+      String username, String password) async {
     final db = await instance.database;
     final maps = await db!.query(usertable,
         columns: UserFields.allFields,
         where: '${UserFields.username} = ? and ${UserFields.password} = ?',
         whereArgs: [username, password]);
     if (maps.isNotEmpty) {
-      return User.fromMap(maps.first);
+      return UserModel.fromMap(maps.first);
     } else {
       throw Exception("$username not found");
     }
   }
 
-  Future<List<User>> getAllUsers() async {
+  Future<List<UserModel>> getAllUsers() async {
     final db = await instance.database;
     final result = await db!.query(usertable);
-    return result.map((e) => User.fromMap(e)).toList();
+    return result.map((e) => UserModel.fromMap(e)).toList();
   }
 
-  Future<int> updateUser(User user) async {
+  Future<int> updateUser(UserModel user) async {
     final db = await instance.database;
     return db!.update(usertable, user.toMap(),
         where: '${UserFields.username} = ?', whereArgs: [user.username]);

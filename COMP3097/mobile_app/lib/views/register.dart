@@ -1,4 +1,3 @@
-
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/database/user_database.dart';
@@ -22,7 +21,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final lastname = TextEditingController();
   final email = TextEditingController();
 
-  List<User> uList = [];
+  List<UserModel> uList = [];
 
   @override
   void dispose() {
@@ -88,7 +87,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ElevatedClassButton(
                   childText: "Submit",
                   onPressed: () {
-                    User newUser = User(
+                    UserModel newUser = UserModel(
                       username: username.text,
                       password: password.text,
                       // firstname: firstname.text,

@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_app/models/shopping_list_model.dart';
 import 'package:mobile_app/services/shopping_list_services.dart';
+import 'package:mobile_app/services/todo_service.dart';
 import 'package:mobile_app/services/user_services.dart';
 import 'package:provider/provider.dart';
+
+import '../database/tables.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -37,6 +40,9 @@ class _SearchState extends State<Search> {
             "product": element[1],
             "price": element[2],
           });
+
+          // Provider.of<TodoService>(context, listen: false).insertItems(
+          //     Item(item: element[0].toString(), price: element[2].toString()));
         }
       });
     } catch (e) {

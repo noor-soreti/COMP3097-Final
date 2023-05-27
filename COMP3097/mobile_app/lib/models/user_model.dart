@@ -18,7 +18,7 @@ class UserFields {
   ];
 }
 
-class User {
+class UserModel {
   int? id;
   final String username;
   String password;
@@ -27,7 +27,7 @@ class User {
   // String lastname;
   // String email;
 
-  User({
+  UserModel({
     required this.username,
     required this.password,
     // required this.firstname,
@@ -35,7 +35,7 @@ class User {
     // required this.email
   });
 
-  User.all(
+  UserModel.all(
       {this.id,
       required this.username,
       required this.password,
@@ -55,7 +55,7 @@ class User {
       };
 
 // getting data back from db, convert from map to User obj
-  static User fromMap(Map<String, Object?> maps) => User(
+  static UserModel fromMap(Map<String, Object?> maps) => UserModel(
         username: maps[UserFields.username] as String,
         password: maps[UserFields.password] as String,
         // firstname: maps[UserFields.firstname] as String,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/database/database.dart';
+import 'package:mobile_app/database/tables.dart';
 import 'package:mobile_app/services/todo_service.dart';
 import 'package:mobile_app/services/user_services.dart';
 import 'package:mobile_app/views/profile.dart';
@@ -40,43 +41,41 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<String?> _authLoginUser(BuildContext context, LoginData data) async {
     String? result = null;
-    // await Provider.of<UserService>(context, listen: false)
-    //     .userLogin(data.name, data.password)
-    //     .then((value) => {
-    //           if (value != "ok") // username or password incorrect
-    //             {
-    //               result = "Username or password incorrect"
-    //               // showDialog<String>(
-    //               //     context: context,
-    //               //     builder: (BuildContext context) => DialogueField(
-    //               //           alert: "Oops",
-    //               //           content: "Username or password incorrect",
-    //               //           onPressed: () {
-    //               //             // Navigator.pop(context);
-    //               //           },
-    //               //           btnText: 'ok',
-    //               //         ))
-    //             }
-    //           else
-    //             {
-    //               Provider.of<UserService>(context, listen: false)
-    //                   .getUser(data.name)
-    //                   .then((value) => {
-    //                         Navigator.of(context).push(MaterialPageRoute(
-    //                             builder: (contex) =>
-    //                                 SideMenu(username: data.name)))
-    //                       })
-    //             }
-    //         });
-
-    Todo todo = Todo(title: "tditle", content: "content", id: 1);
+    await Provider.of<UserService>(context, listen: false)
+        .userLogin(data.name, data.password)
+        .then((value) => {
+              if (value != "ok") // username or password incorrect
+                {
+                  result = "Username or password incorrect"
+                  // showDialog<String>(
+                  //     context: context,
+                  //     builder: (BuildContext context) => DialogueField(
+                  //           alert: "Oops",
+                  //           content: "Username or password incorrect",
+                  //           onPressed: () {
+                  //             // Navigator.pop(context);
+                  //           },
+                  //           btnText: 'ok',
+                  //         ))
+                }
+              else
+                {
+                  Provider.of<UserService>(context, listen: false)
+                      .getUser(data.name)
+                      .then((value) => {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (contex) =>
+                                    SideMenu(username: data.name)))
+                          })
+                }
+            });
 
     return result;
   }
 
   Future<String?> _authSignupUser(BuildContext context, SignupData data) async {
     String? result = null;
-    User newUser = User(
+    UserModel newUser = UserModel(
         password: data.password.toString(), username: data.name.toString());
     try {
       await Provider.of<UserService>(context, listen: false)
