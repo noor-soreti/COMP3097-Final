@@ -1,10 +1,9 @@
 import 'package:drift/drift.dart';
-import 'package:drift/src/runtime/query_builder/query_builder.dart';
-import 'package:drift/src/dsl/dsl.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mobile_app/database/database.dart';
 
-import '../database/tables.dart';
+import '../api_service.dart';
+import '../database/models.dart';
 import '../main.dart';
 
 class TodoService with ChangeNotifier {
@@ -12,9 +11,29 @@ class TodoService with ChangeNotifier {
 
   Future<void> insertItems(Item item) async {
     try {
-      // database.insertItems(item);
+      database.insertItems(
+          ItemDBCompanion(item: Value(item.item), price: Value(item.price)));
+      print("ok");
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<void> test() async {
+    try {
+      database.getItemPrice(1002002);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<dynamic> testingService(int id) async {
+    try {
+      dynamic service = await testService(id);
+      return service;
+    } catch (e) {
+      // print("testsintService - ERROR");
+      return e;
     }
   }
 

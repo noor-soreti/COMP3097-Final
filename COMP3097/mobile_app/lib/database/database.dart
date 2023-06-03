@@ -1,7 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'package:csv/csv.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
-import 'package:mobile_app/main.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
@@ -10,7 +14,8 @@ import 'package:mobile_app/database/tables.dart';
 part 'database.g.dart';
 
 // For each table you've specified in the @DriftDatabase annotation on your database class, a corresponding getter for a table will be generated (can be used to run statements)
-@DriftDatabase(tables: [ItemDB, UserDB, ShoppingCartEntries, CartWithItems])
+@DriftDatabase(
+    tables: [ItemDB, ShoppingCart, ShoppingCartEntries, CartWithItems])
 class MyDatabase extends _$MyDatabase {
   MyDatabase() : super(_openConnection());
 
@@ -20,16 +25,42 @@ class MyDatabase extends _$MyDatabase {
 
   @override
   MigrationStrategy get migration {
-    return MigrationStrategy(
-      beforeOpen: (details) async {
-        if (details.wasCreated) {
-          delete(itemDB);
-        }
-      },
-    );
+    return MigrationStrategy(onCreate: (Migrator m) async {
+      await m.createAll();
+      // await loadItems();
+    });
   }
 
-  // Future<List<ItemDB>> get allTodoEntries => select(itemDB).get();
+  Future<void> loadItems() async {
+    try {
+      var data = await rootBundle.loadString("assets/top-1k-ingredients.csv");
+      List<List<dynamic>> listData = const CsvToListConverter().convert(data);
+      for (var element in listData) {
+        // var elementPrice = await
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // Future<int> return price of item
+
+  Future<void> getItemPrice(int id) async {
+    http.Response response = await http.get(Uri.parse(
+        "http://api.spoonacular.com/food/ingredients/9266/information?amount=1?apiKey=b2de2effb6dd4e71b9ea35cf43c7aeaf"));
+    if (response.statusCode == 200) {
+      print("gresat");
+    } else {
+      print(response.body);
+    }
+    // http.Response response = await http.get(Uri(
+    //     scheme: 'https',
+    //     host: 'api.spoonacular.com',
+    //     path: "food/ingredients/9266/information?amount=1",
+    //     queryParameters: {'apiKey': dotenv.env['API_KEY']}));
+    // var data = jsonDecode(response.toString());
+    // print(response);
+  }
 
   Future<void> insertItems(ItemDBCompanion item) async {
     await into(itemDB).insert(item);
@@ -38,14 +69,6 @@ class MyDatabase extends _$MyDatabase {
   Future<List<ItemDBData>> getItems() async {
     return await select(itemDB).get();
   }
-
-  // Future<void> writeShoppingCart(CartWithItems entry) async {
-  //   return transaction(() async {
-  //     final cart = entry.user;
-  //     await into(shoppingCarts)
-  //         .insert(cart as Insertable<ShoppingCart>, mode: InsertMode.replace);
-  //   });
-  // }
 }
 
 LazyDatabase _openConnection() {
@@ -54,7 +77,14 @@ LazyDatabase _openConnection() {
     // put the database file, called db.sqlite here, into the documents folder
     // for your app.
     final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'db.test'));
+    final file = File(p.join(dbFolder.path, 'another.db'));
+
+    if (!await file.exists()) {
+      print("!await");
+    } else {
+      print("!not");
+    }
+
     return NativeDatabase.createInBackground(file);
   });
 }

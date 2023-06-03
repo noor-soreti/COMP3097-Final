@@ -23,7 +23,7 @@ class UserService with ChangeNotifier {
     String? result = "ok";
     try {
       await UserDatabase.instance.getUser(username);
-      print("userExist - SUCCESS!");
+      // print("userExist - SUCCESS!");
     } catch (e) {
       print("userExist - ERR");
       result = "User does not exist";

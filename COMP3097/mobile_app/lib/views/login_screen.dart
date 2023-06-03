@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/database/database.dart';
+import 'package:mobile_app/database/models.dart';
 import 'package:mobile_app/database/tables.dart';
 import 'package:mobile_app/services/todo_service.dart';
 import 'package:mobile_app/services/user_services.dart';
-import 'package:mobile_app/views/profile.dart';
 import 'package:mobile_app/views/menu_screen.dart';
-import 'package:mobile_app/widget/dialogue_field.dart';
 import 'package:provider/provider.dart';
+import '../api_service.dart';
 import '../models/user_model.dart';
 import 'package:flutter_login/flutter_login.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:mobile_app/database/user_database.dart';
 
@@ -18,19 +18,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // final usernameController = TextEditingController();
-  // final passwordController = TextEditingController();
-
-  // @override
-  // void dispose() {
-  //   usernameController.dispose();
-  //   passwordController.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void initState() {
+    super.initState();
+  }
 
   Future<String?> getUser(String data) async {
     String result = "ok";
-    print("he");
     try {
       await UserDatabase.instance.getUser(data);
     } catch (e) {
@@ -70,10 +64,15 @@ class _LoginPageState extends State<LoginPage> {
                 }
             });
 
+    Item item = Item(item: "item", price: "price");
+
+    // Provider.of<TodoService>(context, listen: false).test();
+
     return result;
   }
 
   Future<String?> _authSignupUser(BuildContext context, SignupData data) async {
+    Provider.of<TodoService>(context, listen: false).test();
     String? result = null;
     UserModel newUser = UserModel(
         password: data.password.toString(), username: data.name.toString());
@@ -83,21 +82,21 @@ class _LoginPageState extends State<LoginPage> {
           .then((value) => {
                 if (value != "ok") // if user does not exist, then create user
                   {
-                    print("_authSignupUser - does not exist (SUCCESS)"),
+                    // print("_authSignupUser - does not exist (SUCCESS)"),
                     Provider.of<UserService>(context, listen: false)
                         .createUser(newUser)
                   }
                 else
                   {
-                    print("_authSignupUser - exist (ERROR)"),
+                    // print("_authSignupUser - exist (ERROR)"),
                     result = "Username already in use"
                   }
               });
     } catch (e) {
-      print("Error during user signup");
+      // print("Error during user signup");
       return "Whoops, something went wrong";
     }
-    print("result: ${result}");
+    // print("result: ${result}");
     return result;
   }
 

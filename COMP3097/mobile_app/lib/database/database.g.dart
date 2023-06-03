@@ -208,11 +208,12 @@ class ItemDBCompanion extends UpdateCompanion<ItemDBData> {
   }
 }
 
-class $UserDBTable extends UserDB with TableInfo<$UserDBTable, UserDBData> {
+class $ShoppingCartTable extends ShoppingCart
+    with TableInfo<$ShoppingCartTable, ShoppingCartData> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $UserDBTable(this.attachedDatabase, [this._alias]);
+  $ShoppingCartTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -222,87 +223,19 @@ class $UserDBTable extends UserDB with TableInfo<$UserDBTable, UserDBData> {
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _usernameMeta =
-      const VerificationMeta('username');
   @override
-  late final GeneratedColumn<String> username = GeneratedColumn<String>(
-      'username', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
-  static const VerificationMeta _passwordMeta =
-      const VerificationMeta('password');
+  List<GeneratedColumn> get $columns => [id];
   @override
-  late final GeneratedColumn<String> password =
-      GeneratedColumn<String>('password', aliasedName, false,
-          additionalChecks: GeneratedColumn.checkTextLength(
-            minTextLength: 6,
-          ),
-          type: DriftSqlType.string,
-          requiredDuringInsert: true);
-  static const VerificationMeta _firstnameMeta =
-      const VerificationMeta('firstname');
+  String get aliasedName => _alias ?? 'shopping_cart';
   @override
-  late final GeneratedColumn<String> firstname = GeneratedColumn<String>(
-      'firstname', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _lastnameMeta =
-      const VerificationMeta('lastname');
+  String get actualTableName => 'shopping_cart';
   @override
-  late final GeneratedColumn<String> lastname = GeneratedColumn<String>(
-      'lastname', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _emailMeta = const VerificationMeta('email');
-  @override
-  late final GeneratedColumn<String> email = GeneratedColumn<String>(
-      'email', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
-  @override
-  List<GeneratedColumn> get $columns =>
-      [id, username, password, firstname, lastname, email];
-  @override
-  String get aliasedName => _alias ?? 'user_d_b';
-  @override
-  String get actualTableName => 'user_d_b';
-  @override
-  VerificationContext validateIntegrity(Insertable<UserDBData> instance,
+  VerificationContext validateIntegrity(Insertable<ShoppingCartData> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('username')) {
-      context.handle(_usernameMeta,
-          username.isAcceptableOrUnknown(data['username']!, _usernameMeta));
-    } else if (isInserting) {
-      context.missing(_usernameMeta);
-    }
-    if (data.containsKey('password')) {
-      context.handle(_passwordMeta,
-          password.isAcceptableOrUnknown(data['password']!, _passwordMeta));
-    } else if (isInserting) {
-      context.missing(_passwordMeta);
-    }
-    if (data.containsKey('firstname')) {
-      context.handle(_firstnameMeta,
-          firstname.isAcceptableOrUnknown(data['firstname']!, _firstnameMeta));
-    } else if (isInserting) {
-      context.missing(_firstnameMeta);
-    }
-    if (data.containsKey('lastname')) {
-      context.handle(_lastnameMeta,
-          lastname.isAcceptableOrUnknown(data['lastname']!, _lastnameMeta));
-    } else if (isInserting) {
-      context.missing(_lastnameMeta);
-    }
-    if (data.containsKey('email')) {
-      context.handle(
-          _emailMeta, email.isAcceptableOrUnknown(data['email']!, _emailMeta));
-    } else if (isInserting) {
-      context.missing(_emailMeta);
     }
     return context;
   }
@@ -310,77 +243,42 @@ class $UserDBTable extends UserDB with TableInfo<$UserDBTable, UserDBData> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  UserDBData map(Map<String, dynamic> data, {String? tablePrefix}) {
+  ShoppingCartData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return UserDBData(
+    return ShoppingCartData(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      username: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}username'])!,
-      password: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}password'])!,
-      firstname: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}firstname'])!,
-      lastname: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}lastname'])!,
-      email: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}email'])!,
     );
   }
 
   @override
-  $UserDBTable createAlias(String alias) {
-    return $UserDBTable(attachedDatabase, alias);
+  $ShoppingCartTable createAlias(String alias) {
+    return $ShoppingCartTable(attachedDatabase, alias);
   }
 }
 
-class UserDBData extends DataClass implements Insertable<UserDBData> {
+class ShoppingCartData extends DataClass
+    implements Insertable<ShoppingCartData> {
   final int id;
-  final String username;
-  final String password;
-  final String firstname;
-  final String lastname;
-  final String email;
-  const UserDBData(
-      {required this.id,
-      required this.username,
-      required this.password,
-      required this.firstname,
-      required this.lastname,
-      required this.email});
+  const ShoppingCartData({required this.id});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['username'] = Variable<String>(username);
-    map['password'] = Variable<String>(password);
-    map['firstname'] = Variable<String>(firstname);
-    map['lastname'] = Variable<String>(lastname);
-    map['email'] = Variable<String>(email);
     return map;
   }
 
-  UserDBCompanion toCompanion(bool nullToAbsent) {
-    return UserDBCompanion(
+  ShoppingCartCompanion toCompanion(bool nullToAbsent) {
+    return ShoppingCartCompanion(
       id: Value(id),
-      username: Value(username),
-      password: Value(password),
-      firstname: Value(firstname),
-      lastname: Value(lastname),
-      email: Value(email),
     );
   }
 
-  factory UserDBData.fromJson(Map<String, dynamic> json,
+  factory ShoppingCartData.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return UserDBData(
+    return ShoppingCartData(
       id: serializer.fromJson<int>(json['id']),
-      username: serializer.fromJson<String>(json['username']),
-      password: serializer.fromJson<String>(json['password']),
-      firstname: serializer.fromJson<String>(json['firstname']),
-      lastname: serializer.fromJson<String>(json['lastname']),
-      email: serializer.fromJson<String>(json['email']),
     );
   }
   @override
@@ -388,116 +286,47 @@ class UserDBData extends DataClass implements Insertable<UserDBData> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'username': serializer.toJson<String>(username),
-      'password': serializer.toJson<String>(password),
-      'firstname': serializer.toJson<String>(firstname),
-      'lastname': serializer.toJson<String>(lastname),
-      'email': serializer.toJson<String>(email),
     };
   }
 
-  UserDBData copyWith(
-          {int? id,
-          String? username,
-          String? password,
-          String? firstname,
-          String? lastname,
-          String? email}) =>
-      UserDBData(
+  ShoppingCartData copyWith({int? id}) => ShoppingCartData(
         id: id ?? this.id,
-        username: username ?? this.username,
-        password: password ?? this.password,
-        firstname: firstname ?? this.firstname,
-        lastname: lastname ?? this.lastname,
-        email: email ?? this.email,
       );
   @override
   String toString() {
-    return (StringBuffer('UserDBData(')
-          ..write('id: $id, ')
-          ..write('username: $username, ')
-          ..write('password: $password, ')
-          ..write('firstname: $firstname, ')
-          ..write('lastname: $lastname, ')
-          ..write('email: $email')
+    return (StringBuffer('ShoppingCartData(')
+          ..write('id: $id')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, username, password, firstname, lastname, email);
+  int get hashCode => id.hashCode;
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is UserDBData &&
-          other.id == this.id &&
-          other.username == this.username &&
-          other.password == this.password &&
-          other.firstname == this.firstname &&
-          other.lastname == this.lastname &&
-          other.email == this.email);
+      (other is ShoppingCartData && other.id == this.id);
 }
 
-class UserDBCompanion extends UpdateCompanion<UserDBData> {
+class ShoppingCartCompanion extends UpdateCompanion<ShoppingCartData> {
   final Value<int> id;
-  final Value<String> username;
-  final Value<String> password;
-  final Value<String> firstname;
-  final Value<String> lastname;
-  final Value<String> email;
-  const UserDBCompanion({
+  const ShoppingCartCompanion({
     this.id = const Value.absent(),
-    this.username = const Value.absent(),
-    this.password = const Value.absent(),
-    this.firstname = const Value.absent(),
-    this.lastname = const Value.absent(),
-    this.email = const Value.absent(),
   });
-  UserDBCompanion.insert({
+  ShoppingCartCompanion.insert({
     this.id = const Value.absent(),
-    required String username,
-    required String password,
-    required String firstname,
-    required String lastname,
-    required String email,
-  })  : username = Value(username),
-        password = Value(password),
-        firstname = Value(firstname),
-        lastname = Value(lastname),
-        email = Value(email);
-  static Insertable<UserDBData> custom({
+  });
+  static Insertable<ShoppingCartData> custom({
     Expression<int>? id,
-    Expression<String>? username,
-    Expression<String>? password,
-    Expression<String>? firstname,
-    Expression<String>? lastname,
-    Expression<String>? email,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (username != null) 'username': username,
-      if (password != null) 'password': password,
-      if (firstname != null) 'firstname': firstname,
-      if (lastname != null) 'lastname': lastname,
-      if (email != null) 'email': email,
     });
   }
 
-  UserDBCompanion copyWith(
-      {Value<int>? id,
-      Value<String>? username,
-      Value<String>? password,
-      Value<String>? firstname,
-      Value<String>? lastname,
-      Value<String>? email}) {
-    return UserDBCompanion(
+  ShoppingCartCompanion copyWith({Value<int>? id}) {
+    return ShoppingCartCompanion(
       id: id ?? this.id,
-      username: username ?? this.username,
-      password: password ?? this.password,
-      firstname: firstname ?? this.firstname,
-      lastname: lastname ?? this.lastname,
-      email: email ?? this.email,
     );
   }
 
@@ -507,33 +336,13 @@ class UserDBCompanion extends UpdateCompanion<UserDBData> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (username.present) {
-      map['username'] = Variable<String>(username.value);
-    }
-    if (password.present) {
-      map['password'] = Variable<String>(password.value);
-    }
-    if (firstname.present) {
-      map['firstname'] = Variable<String>(firstname.value);
-    }
-    if (lastname.present) {
-      map['lastname'] = Variable<String>(lastname.value);
-    }
-    if (email.present) {
-      map['email'] = Variable<String>(email.value);
-    }
     return map;
   }
 
   @override
   String toString() {
-    return (StringBuffer('UserDBCompanion(')
-          ..write('id: $id, ')
-          ..write('username: $username, ')
-          ..write('password: $password, ')
-          ..write('firstname: $firstname, ')
-          ..write('lastname: $lastname, ')
-          ..write('email: $email')
+    return (StringBuffer('ShoppingCartCompanion(')
+          ..write('id: $id')
           ..write(')'))
         .toString();
   }
@@ -545,22 +354,28 @@ class $ShoppingCartEntriesTable extends ShoppingCartEntries
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $ShoppingCartEntriesTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _shoppingCartMeta =
-      const VerificationMeta('shoppingCart');
+  static const VerificationMeta _userShoppingCartMeta =
+      const VerificationMeta('userShoppingCart');
   @override
-  late final GeneratedColumn<int> shoppingCart = GeneratedColumn<int>(
-      'shopping_cart', aliasedName, false,
+  late final GeneratedColumn<int> userShoppingCart = GeneratedColumn<int>(
+      'user_shopping_cart', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
       defaultConstraints:
-          GeneratedColumn.constraintIsAlways('REFERENCES user_d_b (id)'));
+          GeneratedColumn.constraintIsAlways('REFERENCES shopping_cart (id)'));
   static const VerificationMeta _itemMeta = const VerificationMeta('item');
   @override
   late final GeneratedColumn<int> item = GeneratedColumn<int>(
       'item', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _dateTimeAddedMeta =
+      const VerificationMeta('dateTimeAdded');
   @override
-  List<GeneratedColumn> get $columns => [shoppingCart, item];
+  late final GeneratedColumn<DateTime> dateTimeAdded =
+      GeneratedColumn<DateTime>('date_time_added', aliasedName, false,
+          type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [userShoppingCart, item, dateTimeAdded];
   @override
   String get aliasedName => _alias ?? 'shopping_cart_entries';
   @override
@@ -570,19 +385,27 @@ class $ShoppingCartEntriesTable extends ShoppingCartEntries
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('shopping_cart')) {
+    if (data.containsKey('user_shopping_cart')) {
       context.handle(
-          _shoppingCartMeta,
-          shoppingCart.isAcceptableOrUnknown(
-              data['shopping_cart']!, _shoppingCartMeta));
+          _userShoppingCartMeta,
+          userShoppingCart.isAcceptableOrUnknown(
+              data['user_shopping_cart']!, _userShoppingCartMeta));
     } else if (isInserting) {
-      context.missing(_shoppingCartMeta);
+      context.missing(_userShoppingCartMeta);
     }
     if (data.containsKey('item')) {
       context.handle(
           _itemMeta, item.isAcceptableOrUnknown(data['item']!, _itemMeta));
     } else if (isInserting) {
       context.missing(_itemMeta);
+    }
+    if (data.containsKey('date_time_added')) {
+      context.handle(
+          _dateTimeAddedMeta,
+          dateTimeAdded.isAcceptableOrUnknown(
+              data['date_time_added']!, _dateTimeAddedMeta));
+    } else if (isInserting) {
+      context.missing(_dateTimeAddedMeta);
     }
     return context;
   }
@@ -593,10 +416,12 @@ class $ShoppingCartEntriesTable extends ShoppingCartEntries
   ShoppingCartEntry map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ShoppingCartEntry(
-      shoppingCart: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}shopping_cart'])!,
+      userShoppingCart: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}user_shopping_cart'])!,
       item: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}item'])!,
+      dateTimeAdded: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}date_time_added'])!,
     );
   }
 
@@ -608,21 +433,27 @@ class $ShoppingCartEntriesTable extends ShoppingCartEntries
 
 class ShoppingCartEntry extends DataClass
     implements Insertable<ShoppingCartEntry> {
-  final int shoppingCart;
+  final int userShoppingCart;
   final int item;
-  const ShoppingCartEntry({required this.shoppingCart, required this.item});
+  final DateTime dateTimeAdded;
+  const ShoppingCartEntry(
+      {required this.userShoppingCart,
+      required this.item,
+      required this.dateTimeAdded});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['shopping_cart'] = Variable<int>(shoppingCart);
+    map['user_shopping_cart'] = Variable<int>(userShoppingCart);
     map['item'] = Variable<int>(item);
+    map['date_time_added'] = Variable<DateTime>(dateTimeAdded);
     return map;
   }
 
   ShoppingCartEntriesCompanion toCompanion(bool nullToAbsent) {
     return ShoppingCartEntriesCompanion(
-      shoppingCart: Value(shoppingCart),
+      userShoppingCart: Value(userShoppingCart),
       item: Value(item),
+      dateTimeAdded: Value(dateTimeAdded),
     );
   }
 
@@ -630,75 +461,91 @@ class ShoppingCartEntry extends DataClass
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ShoppingCartEntry(
-      shoppingCart: serializer.fromJson<int>(json['shoppingCart']),
+      userShoppingCart: serializer.fromJson<int>(json['userShoppingCart']),
       item: serializer.fromJson<int>(json['item']),
+      dateTimeAdded: serializer.fromJson<DateTime>(json['dateTimeAdded']),
     );
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'shoppingCart': serializer.toJson<int>(shoppingCart),
+      'userShoppingCart': serializer.toJson<int>(userShoppingCart),
       'item': serializer.toJson<int>(item),
+      'dateTimeAdded': serializer.toJson<DateTime>(dateTimeAdded),
     };
   }
 
-  ShoppingCartEntry copyWith({int? shoppingCart, int? item}) =>
+  ShoppingCartEntry copyWith(
+          {int? userShoppingCart, int? item, DateTime? dateTimeAdded}) =>
       ShoppingCartEntry(
-        shoppingCart: shoppingCart ?? this.shoppingCart,
+        userShoppingCart: userShoppingCart ?? this.userShoppingCart,
         item: item ?? this.item,
+        dateTimeAdded: dateTimeAdded ?? this.dateTimeAdded,
       );
   @override
   String toString() {
     return (StringBuffer('ShoppingCartEntry(')
-          ..write('shoppingCart: $shoppingCart, ')
-          ..write('item: $item')
+          ..write('userShoppingCart: $userShoppingCart, ')
+          ..write('item: $item, ')
+          ..write('dateTimeAdded: $dateTimeAdded')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(shoppingCart, item);
+  int get hashCode => Object.hash(userShoppingCart, item, dateTimeAdded);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ShoppingCartEntry &&
-          other.shoppingCart == this.shoppingCart &&
-          other.item == this.item);
+          other.userShoppingCart == this.userShoppingCart &&
+          other.item == this.item &&
+          other.dateTimeAdded == this.dateTimeAdded);
 }
 
 class ShoppingCartEntriesCompanion extends UpdateCompanion<ShoppingCartEntry> {
-  final Value<int> shoppingCart;
+  final Value<int> userShoppingCart;
   final Value<int> item;
+  final Value<DateTime> dateTimeAdded;
   final Value<int> rowid;
   const ShoppingCartEntriesCompanion({
-    this.shoppingCart = const Value.absent(),
+    this.userShoppingCart = const Value.absent(),
     this.item = const Value.absent(),
+    this.dateTimeAdded = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   ShoppingCartEntriesCompanion.insert({
-    required int shoppingCart,
+    required int userShoppingCart,
     required int item,
+    required DateTime dateTimeAdded,
     this.rowid = const Value.absent(),
-  })  : shoppingCart = Value(shoppingCart),
-        item = Value(item);
+  })  : userShoppingCart = Value(userShoppingCart),
+        item = Value(item),
+        dateTimeAdded = Value(dateTimeAdded);
   static Insertable<ShoppingCartEntry> custom({
-    Expression<int>? shoppingCart,
+    Expression<int>? userShoppingCart,
     Expression<int>? item,
+    Expression<DateTime>? dateTimeAdded,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
-      if (shoppingCart != null) 'shopping_cart': shoppingCart,
+      if (userShoppingCart != null) 'user_shopping_cart': userShoppingCart,
       if (item != null) 'item': item,
+      if (dateTimeAdded != null) 'date_time_added': dateTimeAdded,
       if (rowid != null) 'rowid': rowid,
     });
   }
 
   ShoppingCartEntriesCompanion copyWith(
-      {Value<int>? shoppingCart, Value<int>? item, Value<int>? rowid}) {
+      {Value<int>? userShoppingCart,
+      Value<int>? item,
+      Value<DateTime>? dateTimeAdded,
+      Value<int>? rowid}) {
     return ShoppingCartEntriesCompanion(
-      shoppingCart: shoppingCart ?? this.shoppingCart,
+      userShoppingCart: userShoppingCart ?? this.userShoppingCart,
       item: item ?? this.item,
+      dateTimeAdded: dateTimeAdded ?? this.dateTimeAdded,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -706,11 +553,14 @@ class ShoppingCartEntriesCompanion extends UpdateCompanion<ShoppingCartEntry> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (shoppingCart.present) {
-      map['shopping_cart'] = Variable<int>(shoppingCart.value);
+    if (userShoppingCart.present) {
+      map['user_shopping_cart'] = Variable<int>(userShoppingCart.value);
     }
     if (item.present) {
       map['item'] = Variable<int>(item.value);
+    }
+    if (dateTimeAdded.present) {
+      map['date_time_added'] = Variable<DateTime>(dateTimeAdded.value);
     }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
@@ -721,8 +571,9 @@ class ShoppingCartEntriesCompanion extends UpdateCompanion<ShoppingCartEntry> {
   @override
   String toString() {
     return (StringBuffer('ShoppingCartEntriesCompanion(')
-          ..write('shoppingCart: $shoppingCart, ')
+          ..write('userShoppingCart: $userShoppingCart, ')
           ..write('item: $item, ')
+          ..write('dateTimeAdded: $dateTimeAdded, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -732,7 +583,7 @@ class ShoppingCartEntriesCompanion extends UpdateCompanion<ShoppingCartEntry> {
 abstract class _$MyDatabase extends GeneratedDatabase {
   _$MyDatabase(QueryExecutor e) : super(e);
   late final $ItemDBTable itemDB = $ItemDBTable(this);
-  late final $UserDBTable userDB = $UserDBTable(this);
+  late final $ShoppingCartTable shoppingCart = $ShoppingCartTable(this);
   late final $ShoppingCartEntriesTable shoppingCartEntries =
       $ShoppingCartEntriesTable(this);
   @override
@@ -740,5 +591,5 @@ abstract class _$MyDatabase extends GeneratedDatabase {
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [itemDB, userDB, shoppingCartEntries];
+      [itemDB, shoppingCart, shoppingCartEntries];
 }

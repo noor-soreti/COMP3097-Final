@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:math';
 
 import 'package:csv/csv.dart';
@@ -25,29 +26,39 @@ class _SearchState extends State<Search> {
   void initState() {
     _foundProduct = _values;
     loadCSV();
+
     super.initState();
   }
 
 // Load data from csv file
   void loadCSV() async {
-    try {
-      var data = await rootBundle.loadString("assets/food-prices-headers.csv");
-      List<List<dynamic>> listData = const CsvToListConverter().convert(data);
-      setState(() {
-        for (var element in listData) {
-          _values.add({
-            "id": element[0],
-            "product": element[1],
-            "price": element[2],
-          });
+    // try {
+    var data = await rootBundle.loadString("assets/top-1k-ingredients.csv");
+    List<List<dynamic>> listData =
+        const CsvToListConverter().convert(data, eol: "\n");
+    var count = 0;
 
-          // Provider.of<TodoService>(context, listen: false).insertItems(
-          //     Item(item: element[0].toString(), price: element[2].toString()));
-        }
-      });
-    } catch (e) {
-      print(e);
+    for (var element in listData) {
+      // print(element);
+      while (count <= 15) {
+        Provider.of<TodoService>(context, listen: false)
+            .testingService((element[1]))
+            .then((value) => {
+                  setState(() {
+                    _values.add({
+                      "id": element[1],
+                      "product": element[0],
+                      "price": value['estimatedCost']['value'].toString()
+                    });
+                  })
+                });
+        count++;
+        break;
+      }
     }
+    // } catch (e) {
+    //   print(e);
+    // }
   }
 
 // search function adds items to _foundProducts when selected
