@@ -21,7 +21,7 @@ class TodoService with ChangeNotifier {
 
   Future<void> test() async {
     try {
-      database.getItemPrice(1002002);
+      // database.getItemPrice(1002002);
     } catch (e) {
       print(e);
     }
@@ -29,7 +29,7 @@ class TodoService with ChangeNotifier {
 
   Future<dynamic> testingService(int id) async {
     try {
-      dynamic service = await testService(id);
+      dynamic service = await productInfoApi(id);
       return service;
     } catch (e) {
       // print("testsintService - ERROR");

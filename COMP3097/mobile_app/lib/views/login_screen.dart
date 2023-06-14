@@ -1,6 +1,9 @@
+import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mobile_app/database/models.dart';
 import 'package:mobile_app/database/tables.dart';
+import 'package:mobile_app/main.dart';
 import 'package:mobile_app/services/todo_service.dart';
 import 'package:mobile_app/services/user_services.dart';
 import 'package:mobile_app/views/menu_screen.dart';
@@ -20,6 +23,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
+    database.getAllProducts();
     super.initState();
   }
 

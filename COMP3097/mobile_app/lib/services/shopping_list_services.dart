@@ -39,6 +39,7 @@ class ShoppingListService with ChangeNotifier {
     try {
       await UserDatabase.instance.deleteShoppingList(shoppingList);
       // _currentTotal = _currentTotal - shoppingList.price;
+      notifyListeners();
     } catch (e) {
       return e.toString();
     }
@@ -49,6 +50,7 @@ class ShoppingListService with ChangeNotifier {
   Future<String> createShoppingList(ShoppingList shoppingList) async {
     try {
       await UserDatabase.instance.createShoppingList(shoppingList);
+      notifyListeners();
     } catch (e) {
       return e.toString();
     }

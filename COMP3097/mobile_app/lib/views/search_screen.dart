@@ -32,19 +32,19 @@ class _SearchState extends State<Search> {
 
 // Load data from csv file
   void loadCSV() async {
-    // try {
     var data = await rootBundle.loadString("assets/top-1k-ingredients.csv");
     List<List<dynamic>> listData =
         const CsvToListConverter().convert(data, eol: "\n");
     var count = 0;
 
     for (var element in listData) {
-      // print(element);
       while (count <= 15) {
         Provider.of<TodoService>(context, listen: false)
             .testingService((element[1]))
             .then((value) => {
                   setState(() {
+                    print("value: $value");
+                    print("element: $element");
                     _values.add({
                       "id": element[1],
                       "product": element[0],
@@ -56,9 +56,6 @@ class _SearchState extends State<Search> {
         break;
       }
     }
-    // } catch (e) {
-    //   print(e);
-    // }
   }
 
 // search function adds items to _foundProducts when selected
@@ -144,7 +141,7 @@ class _SearchState extends State<Search> {
                       var list = ShoppingList(
                           username: currentUser.username,
                           name: _foundProduct[index]['product'],
-                          price: _foundProduct[index]['price'],
+                          price: double.parse(_foundProduct[index]['price']),
                           quantity: 0);
 
                       appState.createShoppingList(list);

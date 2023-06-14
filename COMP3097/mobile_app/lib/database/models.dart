@@ -1,21 +1,17 @@
-class Item {
+import 'dart:ffi';
+
+class ProductCategory {
   int? id;
-  int? quantity;
-  String item;
-  String price;
+  String name;
+  String description;
 
-  Item({this.id, this.quantity, required this.item, required this.price});
-
-  factory Item.fromJson(Map<String, dynamic> json) {
-    return Item(item: json['item'], price: json['price']);
-  }
+  ProductCategory({this.id, required this.name, required this.description});
 }
 
 class User {
   int? id;
   String username;
   String password;
-  List<String>? shoppingList;
   String firstname;
   String lastname;
   String email;
@@ -29,22 +25,44 @@ class User {
       required this.email});
 }
 
-class Album {
-  final int userId;
-  final int id;
-  final String title;
+class Product {
+  int? id;
+  String name;
+  String description;
+  Double price;
 
-  const Album({
-    required this.userId,
-    required this.id,
-    required this.title,
-  });
+  Product(
+      {this.id,
+      required this.name,
+      required this.description,
+      required this.price});
+}
 
-  factory Album.fromJson(Map<String, dynamic> json) {
-    return Album(
-      userId: json['userId'],
-      id: json['id'],
-      title: json['title'],
-    );
+class Cart {
+  int? id;
+  String product;
+  int quantity;
+
+  Cart({this.id, required this.product, required this.quantity});
+}
+
+class UserCart {
+  int? id;
+  List<Cart> cart;
+  UserCart({this.id, required this.cart});
+}
+
+///////////////
+
+class Item {
+  int? id;
+  int? quantity;
+  String item;
+  String price;
+
+  Item({this.id, this.quantity, required this.item, required this.price});
+
+  factory Item.fromJson(Map<String, dynamic> json) {
+    return Item(item: json['item'], price: json['price']);
   }
 }
