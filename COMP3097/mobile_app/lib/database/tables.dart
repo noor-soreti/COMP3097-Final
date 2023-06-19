@@ -2,6 +2,21 @@ import 'package:drift/drift.dart';
 
 import 'models.dart';
 
+class Todos extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get title => text().withLength(min: 6, max: 32)();
+  TextColumn get content => text().named('body')();
+  IntColumn get category => integer().nullable()();
+}
+
+@DataClassName('Category')
+class Categories extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get description => text()();
+}
+
+/* --------- */
+
 // @DataClassName('product_category')
 // class ProductCategoryDB extends Table {
 //   IntColumn get id => integer().autoIncrement()();
@@ -31,7 +46,6 @@ class ProductDB extends Table {
 
 @DataClassName('cart_items')
 class CartItem extends Table {
-  IntColumn get id => integer().autoIncrement()();
   IntColumn get userId => integer().references(UserDB, #id).named('user_id')();
   IntColumn get productId =>
       integer().references(ProductDB, #id).named('product_id')();
@@ -39,13 +53,6 @@ class CartItem extends Table {
 }
 
 ///////////////
-
-class ItemDB extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  IntColumn get itemId => integer()();
-  TextColumn get item => text().unique()();
-  TextColumn get price => text()();
-}
 
 class ShoppingCart extends Table {
   IntColumn get id => integer().autoIncrement()();
@@ -59,7 +66,7 @@ class ShoppingCart extends Table {
 @DataClassName('ShoppingCartEntry')
 class ShoppingCartEntries extends Table {
   IntColumn get userShoppingCart => integer().references(ShoppingCart, #id)();
-  IntColumn get item => integer().references(ItemDB, #id)();
+  IntColumn get item => integer().references(ProductDB, #id)();
   DateTimeColumn get dateTimeAdded => dateTime()();
 }
 

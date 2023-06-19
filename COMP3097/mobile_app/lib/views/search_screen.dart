@@ -4,12 +4,14 @@ import 'dart:math';
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobile_app/main.dart';
 import 'package:mobile_app/models/shopping_list_model.dart';
 import 'package:mobile_app/services/shopping_list_services.dart';
-import 'package:mobile_app/services/todo_service.dart';
+import 'package:mobile_app/services/product_service.dart';
 import 'package:mobile_app/services/user_services.dart';
 import 'package:provider/provider.dart';
 
+import '../database/models.dart';
 import '../database/tables.dart';
 
 class Search extends StatefulWidget {
@@ -25,36 +27,18 @@ class _SearchState extends State<Search> {
   @override
   void initState() {
     _foundProduct = _values;
-    loadCSV();
-
+    setState(() {
+      productList();
+    });
     super.initState();
   }
 
-// Load data from csv file
-  void loadCSV() async {
-    var data = await rootBundle.loadString("assets/top-1k-ingredients.csv");
-    List<List<dynamic>> listData =
-        const CsvToListConverter().convert(data, eol: "\n");
-    var count = 0;
-
-    for (var element in listData) {
-      while (count <= 15) {
-        Provider.of<TodoService>(context, listen: false)
-            .testingService((element[1]))
-            .then((value) => {
-                  setState(() {
-                    print("value: $value");
-                    print("element: $element");
-                    _values.add({
-                      "id": element[1],
-                      "product": element[0],
-                      "price": value['estimatedCost']['value'].toString()
-                    });
-                  })
-                });
-        count++;
-        break;
-      }
+  Future<void> productList() async {
+    List<Product> products = await database.getAllProducts();
+    for (var element in products) {
+      print(element);
+      _values.add(
+          {"id": element.id, "product": element.name, "price": element.price});
     }
   }
 
@@ -123,7 +107,7 @@ class _SearchState extends State<Search> {
             ElevatedButton(
               onPressed: () => {sortAsc()},
               child: Text("Asc"),
-            )
+            ),
           ],
         ),
         Expanded(

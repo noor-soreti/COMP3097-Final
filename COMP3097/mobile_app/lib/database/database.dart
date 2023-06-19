@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:csv/csv.dart';
 import 'package:flutter/services.dart';
@@ -14,8 +16,15 @@ import 'package:mobile_app/database/tables.dart';
 part 'database.g.dart';
 
 // For each table you've specified in the @DriftDatabase annotation on your database class, a corresponding getter for a table will be generated (can be used to run statements)
-@DriftDatabase(
-    tables: [UserDB, ProductDB, ItemDB, ShoppingCart, ShoppingCartEntries])
+@DriftDatabase(tables: [
+  Categories,
+  Todos,
+  UserDB,
+  ProductDB,
+  ShoppingCart,
+  ShoppingCartEntries,
+  CartItem
+])
 class MyDatabase extends _$MyDatabase {
   MyDatabase() : super(_openConnection());
 
@@ -28,56 +37,60 @@ class MyDatabase extends _$MyDatabase {
     return MigrationStrategy(onCreate: (Migrator m) async {
       await m.createAll();
       await insertProduct();
-      // await productCategoryInsert();
-      // await insertProductCategories();
     });
   }
 
-  /* PRODUCE */
+  Future<List<Todo>> get allTodoEntries => select(todos).get();
 
-  Future<void> insertProduct() async {
-    var data = await rootBundle.loadString("assets/top-1k-ingredients.csv");
-    List<List<dynamic>> listData =
-        const CsvToListConverter().convert(data, eol: "\n");
-    var count = 0;
-
-    for (var e in listData) {
-      while (count < 150) {
-        productInfoApi(e[1]).then((value) => {
-              into(productDB).insert(ProductDBCompanion.insert(
-                  id: e[1],
-                  name: e[0],
-                  description: "description",
-                  price: value['estimatedCost']['value']))
-            });
-        count++;
-        break;
-      }
-    }
+  Stream<List<Todo>> watchEntriesInCategory(Category c) {
+    return (select(todos)..where((t) => t.category.equals(c.id))).watch();
   }
 
-  Future<void> getAllProducts() async {
-    List<product> result = await (select(productDB)).get();
-    for (var i in result) {
-      print(i);
-    }
+  Future<int> addTodo(TodosCompanion entry) {
+    return into(todos).insert(entry);
+  }
+
+  Future<void> databaseTest() async {
+    await into(categories)
+        .insert(CategoriesCompanion.insert(description: 'my first category'));
+
+    // Simple select:
+    final allCategories = await select(categories).get();
+    print('Categories in database: $allCategories');
   }
 
   /* USER */
 
-  Future<User> createUser(User user) async {
+  Future<void> createUser(User user) async {
     await into(userDB).insert(UserDBCompanion.insert(
         username: user.username,
         password: user.password,
-        email: user.email,
-        firstName: user.firstname,
-        lastName: user.lastname));
-    return user;
+        email: user.email.toString(),
+        firstName: user.firstname.toString(),
+        lastName: user.lastname.toString()));
+    final allUsers = await select(userDB).get();
+    print('Users in DB: $allUsers');
   }
 
-  Stream<user> getUser(String username) {
-    return (select(userDB)..where((u) => u.username.equals(username)))
-        .watchSingle();
+  Future<User> getUser(String username) async {
+    final query =
+        (select(userDB)..where((tbl) => tbl.username.equals(username)));
+
+    return query
+        .map((event) => User(
+            username: event.username,
+            password: event.password,
+            email: event.email,
+            firstname: event.firstName,
+            lastname: event.lastName))
+        .getSingle();
+  }
+
+  FutureOr<user> getUsernamePassword(String username, String password) async {
+    return await (select(userDB)
+          ..where((tbl) =>
+              tbl.username.equals(username) & tbl.password.equals(password)))
+        .getSingle();
   }
 
   Future<List<user>> getAllUsers() async {
@@ -91,9 +104,9 @@ class MyDatabase extends _$MyDatabase {
         .write(UserDBCompanion(
       username: Value(user.username),
       password: Value(user.password),
-      firstName: Value(user.firstname),
-      lastName: Value(user.lastname),
-      email: Value(user.email),
+      firstName: Value(user.firstname.toString()),
+      lastName: Value(user.lastname.toString()),
+      email: Value(user.email.toString()),
     ));
   }
 
@@ -101,35 +114,67 @@ class MyDatabase extends _$MyDatabase {
     return (delete(userDB)..where((u) => u.username.equals(username)));
   }
 
-  Future<void> productCategoryInsert() async {
-    // List<List<dynamic>> listData = await loadCSV();
-    // var count = 0;
-    // for (var e in listData) {
-    //   testService(e[1]).then((value) => into(productCategoryDB)
-    //       .insert(ProductCategoryDBCompanion(name: Value(value['aisle']))));
-    // }
+  /* CART */
 
-    // await batch((batch) {
-    //   batch.insertAll(productCategoryDB, [
-    //     ProductCategoryDBCompanion.insert(
-    //         name: "fruit", desc: "produce with seeds"),
-    //     ProductCategoryDBCompanion.insert(
-    //         name: "vegetable", desc: "produce without seeds"),
-    //     ProductCategoryDBCompanion.insert(
-    //         name: "canned goods", desc: "food in can"),
-    //     ProductCategoryDBCompanion.insert(
-    //         name: "frozen foods", desc: "frozen foods"),
-    //     ProductCategoryDBCompanion.insert(name: "meat", desc: "meat"),
-    //     ProductCategoryDBCompanion.insert(
-    //         name: "fish & shellfish", desc: "fish & shellfish"),
-    //     ProductCategoryDBCompanion.insert(name: "other", desc: "other foods")
-    //   ]);
-    // });
+  Future<void> getUserCart(User user) async {
+    var t = await (select(cartItem)
+          ..where((tbl) => tbl.userId.equals(user.id!)))
+        .get();
+
+    print(t);
+  }
+
+  Future<void> userShoppingCart(UserCart userCart) async {
+    final cart = userCart.user;
+
+    for (var i in userCart.cart) {
+      print(i.product);
+      await into(cartItem).insert(CartItemCompanion.insert(
+          userId: cart.id ?? 0, productId: i.id, quantity: i.quantity));
+    }
+  }
+
+  /* PRODUCT */
+
+  Future<List<Product>> getAllProducts() {
+    final query = select(productDB);
+    return query
+        .map((q) =>
+            Product(name: q.name, description: q.description, price: q.price))
+        .get();
+  }
+
+  Future<void> insertProduct() async {
+    var data = await rootBundle.loadString("assets/top-1k-ingredients.csv");
+    List<List<dynamic>> listData =
+        const CsvToListConverter().convert(data, eol: "\n");
+    var count = 0;
+
+    for (var e in listData) {
+      while (count < 140) {
+        productInfoApi(e[1]).then((value) => {
+              into(productDB).insert(ProductDBCompanion.insert(
+                  id: e[1],
+                  name: e[0],
+                  description: "description",
+                  price: value['estimatedCost']['value']))
+            });
+        count++;
+        break;
+      }
+    }
+  }
+
+  Future<void> getProduct(String product) async {
+    final query = await getAllProducts;
+
+    final test = await select(productDB).get(); // where product.name == product
+    print(test);
   }
 
   Future<void> x(int id) async {
     http.Response response = await http.get(Uri.parse(
-        "http://api.spoonacular.com/food/ingredients/9266/information?amount=1?apiKey=b2de2effb6dd4e71b9ea35cf43c7aeaf"));
+        "http://api.spoonacular.com/food/ingredients/9266/information?amount=1?apiKey=db619c3581aa4df5a89cad80446e37fe"));
     if (response.statusCode == 200) {
       print("great");
     } else {
@@ -145,7 +190,7 @@ class MyDatabase extends _$MyDatabase {
       while (count <= 15) {
         productInfoApi(e[1]).then((value) => {
               batch((batch) => {
-                    batch.insertAll(itemDB, [
+                    batch.insertAll(productDB, [
                       ProductDBCompanion.insert(
                           // categoryId: value['aisle'].toLowerCase(),
                           id: e[0],
@@ -165,14 +210,6 @@ class MyDatabase extends _$MyDatabase {
         const CsvToListConverter().convert(data, eol: "\n");
     return listData;
   }
-
-  Future<void> insertItems(ItemDBCompanion item) async {
-    await into(itemDB).insert(item);
-  }
-
-  Future<List<ItemDBData>> getItems() async {
-    return await select(itemDB).get();
-  }
 }
 
 LazyDatabase _openConnection() {
@@ -181,12 +218,12 @@ LazyDatabase _openConnection() {
     // put the database file, called db.sqlite here, into the documents folder
     // for your app.
     final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'testing3.db'));
+    final file = File(p.join(dbFolder.path, 'testing6.sqlite'));
 
     if (!await file.exists()) {
-      print("!await");
+      print("_openConnection (database.dart) - file does not exist");
     } else {
-      print("!not");
+      print("_openConnection (database.dart) - file exists");
     }
 
     return NativeDatabase.createInBackground(file);

@@ -1,17 +1,12 @@
-import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:mobile_app/database/models.dart';
-import 'package:mobile_app/database/tables.dart';
 import 'package:mobile_app/main.dart';
-import 'package:mobile_app/services/todo_service.dart';
+import 'package:mobile_app/services/product_service.dart';
 import 'package:mobile_app/services/user_services.dart';
 import 'package:mobile_app/views/menu_screen.dart';
 import 'package:provider/provider.dart';
-import '../api_service.dart';
 import '../models/user_model.dart';
 import 'package:flutter_login/flutter_login.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:mobile_app/database/user_database.dart';
 
@@ -23,7 +18,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
-    database.getAllProducts();
+    // database.getAllUsers();
     super.initState();
   }
 
@@ -39,68 +34,52 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<String?> _authLoginUser(BuildContext context, LoginData data) async {
     String? result = null;
-    await Provider.of<UserService>(context, listen: false)
-        .userLogin(data.name, data.password)
-        .then((value) => {
-              if (value != "ok") // username or password incorrect
-                {
-                  result = "Username or password incorrect"
-                  // showDialog<String>(
-                  //     context: context,
-                  //     builder: (BuildContext context) => DialogueField(
-                  //           alert: "Oops",
-                  //           content: "Username or password incorrect",
-                  //           onPressed: () {
-                  //             // Navigator.pop(context);
-                  //           },
-                  //           btnText: 'ok',
-                  //         ))
-                }
-              else
-                {
-                  Provider.of<UserService>(context, listen: false)
-                      .getUser(data.name)
-                      .then((value) => {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (contex) =>
-                                    SideMenu(username: data.name)))
-                          })
-                }
-            });
+    final loginData = await Provider.of<UserService>(context, listen: false)
+        .userLogin(data.name, data.password);
 
-    Item item = Item(item: "item", price: "price");
-
-    // Provider.of<TodoService>(context, listen: false).test();
-
+    if (loginData != "ok") // username or password incorrect
+    {
+      result = "Username or password incorrect";
+    } else {
+      Provider.of<UserService>(context, listen: false)
+          .setCurrentUser(data.name)
+          .then((value) => {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (contex) => SideMenu(username: data.name)))
+              });
+    }
     return result;
   }
 
   Future<String?> _authSignupUser(BuildContext context, SignupData data) async {
-    Provider.of<TodoService>(context, listen: false).test();
     String? result = null;
-    UserModel newUser = UserModel(
-        password: data.password.toString(), username: data.name.toString());
-    try {
-      await Provider.of<UserService>(context, listen: false)
-          .userExists(newUser.username)
-          .then((value) => {
-                if (value != "ok") // if user does not exist, then create user
-                  {
-                    // print("_authSignupUser - does not exist (SUCCESS)"),
-                    Provider.of<UserService>(context, listen: false)
-                        .createUser(newUser)
-                  }
-                else
-                  {
-                    // print("_authSignupUser - exist (ERROR)"),
-                    result = "Username already in use"
-                  }
-              });
-    } catch (e) {
-      // print("Error during user signup");
-      return "Whoops, something went wrong";
+
+    User user = User(
+        username: data.name.toString(), password: data.password.toString());
+
+    data.additionalSignupData?.forEach((key, value) {
+      if (key == 'firstName') {
+        user.firstname = value;
+      }
+      if (key == 'lastName') {
+        user.lastname = value;
+      }
+      if (key == 'email') {
+        user.email = value;
+      }
+    });
+
+    final userExist = await Provider.of<UserService>(context, listen: false)
+        .userExists(user.username);
+
+    if (userExist != "ok") // if user does not exist, then create user
+    {
+      // ignore: use_build_context_synchronously
+      Provider.of<UserService>(context, listen: false).createUser(user);
+    } else {
+      result = "Username already in use";
     }
-    // print("result: ${result}");
+
     return result;
   }
 
@@ -129,6 +108,32 @@ class _LoginPageState extends State<LoginPage> {
         }
         return null;
       },
+      additionalSignupFields: [
+        UserFormField(
+            keyName: "firstName",
+            displayName: "First Name",
+            fieldValidator: (val) {
+              if (val == null || val.isEmpty) {
+                return "First name required";
+              }
+            }),
+        UserFormField(
+            keyName: "lastName",
+            displayName: "Last Name",
+            fieldValidator: (val) {
+              if (val == null || val.isEmpty) {
+                return "Last name required";
+              }
+            }),
+        UserFormField(
+            keyName: "email",
+            displayName: "Email",
+            fieldValidator: (val) {
+              if (val == null || val.isEmpty) {
+                return "Email required";
+              }
+            })
+      ],
       messages: LoginMessages(
         signUpSuccess: "Your account is now registered!",
       ),

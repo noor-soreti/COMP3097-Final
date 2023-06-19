@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:mobile_app/database/user_database.dart';
+import 'package:mobile_app/main.dart';
 import 'package:mobile_app/models/shopping_list_model.dart';
 
 class ShoppingListService with ChangeNotifier {
@@ -10,12 +11,12 @@ class ShoppingListService with ChangeNotifier {
 
   Future<String> getShoppingList(String username) async {
     try {
+      var t = await database.getAllProducts;
+      print(t);
       _list = await UserDatabase.instance
           .getShoppingList(username)
           .then((value) => value);
-      for (var element in _list) {
-        // print(element.quantity);
-      }
+
       notifyListeners();
     } catch (e) {
       return e.toString();

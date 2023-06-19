@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/database/database.dart';
-import 'package:mobile_app/database/user_database.dart';
+import 'package:mobile_app/main.dart';
 
-import '../models/user_model.dart';
+import '../database/models.dart';
 
 class UserService with ChangeNotifier {
-  late UserModel _currentUser;
-  UserModel get currentUser => _currentUser;
+  late User _currentUser;
+  User get currentUser => _currentUser;
 
-  Future<String> getUser(String username) async {
+  Future<String> setCurrentUser(String username) async {
     String result = "ok";
     try {
-      _currentUser = await UserDatabase.instance.getUser(username);
+      _currentUser = await database.getUser(username);
       notifyListeners();
     } catch (e) {
       result = "Err";
@@ -22,8 +21,8 @@ class UserService with ChangeNotifier {
   Future<String?> userExists(String username) async {
     String? result = "ok";
     try {
-      await UserDatabase.instance.getUser(username);
-      // print("userExist - SUCCESS!");
+      await database.getUser(username);
+      notifyListeners();
     } catch (e) {
       print("userExist - ERR");
       result = "User does not exist";
@@ -34,48 +33,48 @@ class UserService with ChangeNotifier {
   Future<String?> userLogin(String username, String password) async {
     String? result = "ok";
     try {
-      await UserDatabase.instance
-          .getUsernamePassword(username, password)
-          .then((value) {});
+      await database.getUsernamePassword(username, password);
+      notifyListeners();
     } catch (e) {
       result = "User does not exist";
     }
     return result;
   }
 
-  Map<String, String> getUserInfo(String username) {
-    var userInfo = <String, String>{};
-    userInfo.addAll({
-      'username': currentUser.username,
-      'password': currentUser.password,
-      // 'first name': currentUser.firstname,
-      // 'last name': currentUser.lastname,
-      // 'email': currentUser.email
-    });
-    // print(userInfo['password']);
-    return userInfo;
+  Future<User> getUser(String username) async {
+    return await database.getUser(username);
+    // var userInfo = <String, String>{};
+
+    // userInfo.addAll({
+    //   'username': currentUser.username,
+    //   'password': currentUser.password,
+    //   // 'first name': currentUser.firstname,
+    //   // 'last name': currentUser.lastname,
+    //   // 'email': currentUser.email
+    // });
+    // return userInfo;
   }
 
-  Future<String> updateUser(String password) async {
-    String result = "ok";
-    _currentUser.password = password;
-    notifyListeners();
-    try {
-      await UserDatabase.instance.updateUser(_currentUser);
-    } catch (e) {
-      result = "did not update";
-    }
-    return result;
-  }
+  // Future<String> updateUser(String password) async {
+  //   String result = "ok";
+  //   _currentUser.password = password;
+  //   notifyListeners();
+  //   try {
+  //     await UserDatabase.instance.updateUser(_currentUser);
+  //   } catch (e) {
+  //     result = "did not update";
+  //   }
+  //   return result;
+  // }
 
-  Future<String> createUser(UserModel user) async {
+  Future<String> createUser(User user) async {
     String result = "ok";
     try {
-      await UserDatabase.instance.createUser(user);
+      await database.createUser(user);
+      notifyListeners();
     } catch (e) {
       result = "did not create";
     }
-    notifyListeners();
     return result;
   }
 }
