@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/main.dart';
 
-import '../database/models.dart';
+import '../../database/models.dart';
 
 class UserService with ChangeNotifier {
   late User _currentUser;

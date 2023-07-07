@@ -1,72 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mobile_app/database/database.dart';
-import 'package:mobile_app/services/shopping_list_services.dart';
-import 'package:mobile_app/services/product_service.dart';
-import 'package:mobile_app/services/user_services.dart';
-import 'package:mobile_app/views/login_screen.dart';
+import 'package:mobile_app/src/auth_service.dart';
+import 'package:mobile_app/src/wrapper.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'extra/models/user_model.dart';
+import 'firebase_options.dart';
+import 'package:firebase_database/firebase_database.dart';
+// new
 import 'package:provider/provider.dart';
 
-import 'database/models.dart';
-
-late MyDatabase database;
+MyDatabase database = MyDatabase();
 
 Future main() async {
-  await dotenv.load(fileName: ".env");
-  database = MyDatabase();
-  // User user = await database.getUser('test');
-  // List<Cart> cart = [];
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
-  // List<Product> productList = await database.getAllProducts();
-
-  // int count = 0;
-
-  // while (count < 5) {
-  //   productList.forEach((element) {
-  //     print(element);
-  //     cart.add(Cart(id: count, product: element.name, quantity: count++));
-  //     count++;
-  //   });
-  // }
-
-  // UserCart userCart = UserCart(user: user, cart: cart);
-
-  // await database.userShoppingCart(userCart);
-
-  // await database.getUserCart(user);
+  // database = MyDatabase();
 
   runApp(MyApp());
 }
 
-/* 
-Code in MyApp sets up the whole app. It creates the app-wide state, names the app, defines the visual theme, and sets the "home" widget—the starting point of your app.
-*/
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => UserService()),
-          ChangeNotifierProvider(create: (context) => ShoppingListService()),
-          ChangeNotifierProvider(create: (context) => ProductService()),
-        ],
-        child: MaterialApp(
-          title: 'ShopU',
-          theme: ThemeData(
-            useMaterial3: true,
-            primaryColor: Color.fromRGBO(56, 160, 224, 0.438),
-            // colorScheme: ColorScheme.fromSeed(
-            //     seedColor: Color.fromRGBO(56, 160, 224, 0.438))
-          ),
-          home: Scaffold(
-            appBar: AppBar(
-                // title: const Text("ShopU"),
-                ),
-            body: LoginPage(),
-          ),
-          debugShowCheckedModeBanner: false,
-        ));
+    // wrap root widget in StreamProvider and spec. what stream we want to listen to (onAuthStateChanged)
+    // this allows descendants to access data provided by stream
+    return StreamProvider<UserModel?>.value(
+        initialData: null,
+        value: AuthService().onAuthStateChanged,
+        builder: (context, snapshot) {
+          return MaterialApp(
+            home: Wrapper(),
+          );
+        });
   }
 }

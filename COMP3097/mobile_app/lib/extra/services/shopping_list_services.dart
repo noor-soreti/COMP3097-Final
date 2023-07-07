@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:mobile_app/database/user_database.dart';
 import 'package:mobile_app/main.dart';
-import 'package:mobile_app/models/shopping_list_model.dart';
+import 'package:mobile_app/extra/models/shopping_list_model.dart';
 
 class ShoppingListService with ChangeNotifier {
   List<ShoppingList> _list = [];
@@ -13,9 +13,9 @@ class ShoppingListService with ChangeNotifier {
     try {
       var t = await database.getAllProducts;
       print(t);
-      _list = await UserDatabase.instance
-          .getShoppingList(username)
-          .then((value) => value);
+      // _list = await UserDatabase.instance
+      //     .getShoppingList(username)
+      //     .then((value) => value);
 
       notifyListeners();
     } catch (e) {
@@ -26,8 +26,8 @@ class ShoppingListService with ChangeNotifier {
 
   Future<String> getPrice(String username) async {
     try {
-      _currentTotal =
-          await UserDatabase.instance.getPrice(username).then((value) => value);
+      // _currentTotal =
+      // await UserDatabase.instance.getPrice(username).then((value) => value);
       notifyListeners();
     } catch (e) {
       print("getPrice() - ERR");
@@ -38,7 +38,7 @@ class ShoppingListService with ChangeNotifier {
 
   Future<String> deleteShoppingList(ShoppingList shoppingList) async {
     try {
-      await UserDatabase.instance.deleteShoppingList(shoppingList);
+      // await UserDatabase.instance.deleteShoppingList(shoppingList);
       // _currentTotal = _currentTotal - shoppingList.price;
       notifyListeners();
     } catch (e) {
@@ -50,7 +50,7 @@ class ShoppingListService with ChangeNotifier {
 
   Future<String> createShoppingList(ShoppingList shoppingList) async {
     try {
-      await UserDatabase.instance.createShoppingList(shoppingList);
+      // await UserDatabase.instance.createShoppingList(shoppingList);
       notifyListeners();
     } catch (e) {
       return e.toString();

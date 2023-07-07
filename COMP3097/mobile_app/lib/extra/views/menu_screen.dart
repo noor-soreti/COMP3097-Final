@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/views/profile.dart';
-import 'package:mobile_app/views/shopping_cart.dart';
-import 'package:mobile_app/views/search_screen.dart';
+import 'package:mobile_app/extra/views/profile.dart';
+import 'package:mobile_app/extra/views/shopping_cart.dart';
+import 'package:mobile_app/extra/views/search_screen.dart';
 
 class SideMenu extends StatefulWidget {
   SideMenu({super.key, required this.username});
@@ -32,7 +32,7 @@ class _SideMenuState extends State<SideMenu> {
         page = Search();
         break;
       default:
-        throw UnimplementedError('no widget for $selectedIndex');
+        page = Placeholder();
     }
 
     return LayoutBuilder(builder: (context, constraints) {

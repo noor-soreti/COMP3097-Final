@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
-import 'package:mobile_app/api_service.dart';
+import 'package:mobile_app/auth/api_service.dart';
 import 'package:mobile_app/database/models.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -16,15 +16,7 @@ import 'package:mobile_app/database/tables.dart';
 part 'database.g.dart';
 
 // For each table you've specified in the @DriftDatabase annotation on your database class, a corresponding getter for a table will be generated (can be used to run statements)
-@DriftDatabase(tables: [
-  Categories,
-  Todos,
-  UserDB,
-  ProductDB,
-  ShoppingCart,
-  ShoppingCartEntries,
-  CartItem
-])
+@DriftDatabase(tables: [UserDB, ProductDB, CartItem])
 class MyDatabase extends _$MyDatabase {
   MyDatabase() : super(_openConnection());
 
@@ -40,24 +32,9 @@ class MyDatabase extends _$MyDatabase {
     });
   }
 
-  Future<List<Todo>> get allTodoEntries => select(todos).get();
-
-  Stream<List<Todo>> watchEntriesInCategory(Category c) {
-    return (select(todos)..where((t) => t.category.equals(c.id))).watch();
-  }
-
-  Future<int> addTodo(TodosCompanion entry) {
-    return into(todos).insert(entry);
-  }
-
-  Future<void> databaseTest() async {
-    await into(categories)
-        .insert(CategoriesCompanion.insert(description: 'my first category'));
-
-    // Simple select:
-    final allCategories = await select(categories).get();
-    print('Categories in database: $allCategories');
-  }
+  // Stream<List<Todo>> watchEntriesInCategory(Category c) {
+  //   return (select(todos)..where((t) => t.category.equals(c.id))).watch();
+  // }
 
   /* USER */
 
@@ -93,9 +70,16 @@ class MyDatabase extends _$MyDatabase {
         .getSingle();
   }
 
-  Future<List<user>> getAllUsers() async {
-    final result = (select(userDB)).get();
-    return result;
+  Future<List<User>> getAllUsers() async {
+    final query = (select(userDB));
+    return await query
+        .map((q) => User(
+            username: q.username,
+            password: q.password,
+            email: q.email,
+            firstname: q.firstName,
+            lastname: q.lastName))
+        .get();
     // return result.map()....
   }
 
@@ -125,22 +109,24 @@ class MyDatabase extends _$MyDatabase {
   }
 
   Future<void> userShoppingCart(UserCart userCart) async {
-    final cart = userCart.user;
+    // final cart = userCart.user;
 
-    for (var i in userCart.cart) {
-      print(i.product);
-      await into(cartItem).insert(CartItemCompanion.insert(
-          userId: cart.id ?? 0, productId: i.id, quantity: i.quantity));
-    }
+    // for (var i in userCart.cart) {
+    //   print(i.product);
+    //   await into(cartItem).insert(CartItemCompanion.insert(
+    //       userId: cart.id ?? 0, productId: i.id, quantity: i.quantity));
+    // }
   }
 
   /* PRODUCT */
 
-  Future<List<Product>> getAllProducts() {
+  Future<List<Product>> getAllProducts() async {
     final query = select(productDB);
-    return query
-        .map((q) =>
-            Product(name: q.name, description: q.description, price: q.price))
+    print("QUERY");
+
+    return await query
+        .map((q) => Product(
+            id: q.id, name: q.name, description: q.description, price: q.price))
         .get();
   }
 
@@ -151,8 +137,10 @@ class MyDatabase extends _$MyDatabase {
     var count = 0;
 
     for (var e in listData) {
-      while (count < 140) {
+      while (count < 2) {
         productInfoApi(e[1]).then((value) => {
+              print(
+                  'e1 (id): ${e[1]}\ne[0] (name): ${e[0]}\n description: XX\nprice: ${value['estimatedCost']['value']}'),
               into(productDB).insert(ProductDBCompanion.insert(
                   id: e[1],
                   name: e[0],
@@ -218,7 +206,7 @@ LazyDatabase _openConnection() {
     // put the database file, called db.sqlite here, into the documents folder
     // for your app.
     final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'testing6.sqlite'));
+    final file = File(p.join(dbFolder.path, 'testing5.sqlite'));
 
     if (!await file.exists()) {
       print("_openConnection (database.dart) - file does not exist");

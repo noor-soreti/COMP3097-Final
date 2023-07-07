@@ -6,15 +6,18 @@
 
 #include "generated_plugin_registrant.h"
 
+#include <desktop_webview_auth/desktop_webview_auth_plugin.h>
+#include <firebase_core/firebase_core_plugin_c_api.h>
 #include <realm/realm_plugin.h>
-#include <sqlite3_flutter_libs/sqlite3_flutter_libs_plugin.h>
 #include <url_launcher_windows/url_launcher_windows.h>
 
 void RegisterPlugins(flutter::PluginRegistry* registry) {
+  DesktopWebviewAuthPluginRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("DesktopWebviewAuthPlugin"));
+  FirebaseCorePluginCApiRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("FirebaseCorePluginCApi"));
   RealmPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("RealmPlugin"));
-  Sqlite3FlutterLibsPluginRegisterWithRegistrar(
-      registry->GetRegistrarForPlugin("Sqlite3FlutterLibsPlugin"));
   UrlLauncherWindowsRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("UrlLauncherWindows"));
 }

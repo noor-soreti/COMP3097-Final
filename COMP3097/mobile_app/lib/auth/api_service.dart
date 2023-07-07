@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 Future<dynamic> productInfoApi(int id) async {
   var response = await http.get(Uri.parse(
-      "https://api.spoonacular.com/food/ingredients/$id/information?amount=1&apiKey=db619c3581aa4df5a89cad80446e37fe"));
+      "https://api.spoonacular.com/food/ingredients/$id/information?amount=1&apiKey=b2de2effb6dd4e71b9ea35cf43c7aeaf"));
   if (response.statusCode == 200) {
     return jsonDecode(response.body);
   } else {
@@ -14,7 +14,7 @@ Future<dynamic> productInfoApi(int id) async {
 
 Future<dynamic> aisleTest(int id) async {
   var response = await http.get(Uri.parse(
-      "https://api.spoonacular.com/food/products/$id/&apiKey=db619c3581aa4df5a89cad80446e37fe"));
+      "https://api.spoonacular.com/food/products/$id/&apiKey=b2de2effb6dd4e71b9ea35cf43c7aeaf"));
   if (response.statusCode == 200) {
     return jsonDecode(response.body);
   } else {

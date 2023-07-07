@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/models/shopping_list_model.dart';
-import 'package:mobile_app/services/shopping_list_services.dart';
+import 'package:mobile_app/extra/models/shopping_list_model.dart';
+import 'package:mobile_app/extra/services/shopping_list_services.dart';
 import 'package:provider/provider.dart';
 
 import '../services/user_services.dart';

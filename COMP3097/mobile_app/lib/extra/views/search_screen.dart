@@ -1,18 +1,11 @@
-import 'dart:ffi';
-import 'dart:math';
-
-import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:mobile_app/main.dart';
-import 'package:mobile_app/models/shopping_list_model.dart';
-import 'package:mobile_app/services/shopping_list_services.dart';
-import 'package:mobile_app/services/product_service.dart';
-import 'package:mobile_app/services/user_services.dart';
+import 'package:mobile_app/extra/models/shopping_list_model.dart';
+import 'package:mobile_app/extra/services/shopping_list_services.dart';
+import 'package:mobile_app/extra/services/user_services.dart';
 import 'package:provider/provider.dart';
 
-import '../database/models.dart';
-import '../database/tables.dart';
+import '../../database/models.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -28,6 +21,7 @@ class _SearchState extends State<Search> {
   void initState() {
     _foundProduct = _values;
     setState(() {
+      print("hello");
       productList();
     });
     super.initState();
@@ -42,7 +36,6 @@ class _SearchState extends State<Search> {
     }
   }
 
-// search function adds items to _foundProducts when selected
   void _runFilter(String enteredKeyword) {
     List<Map<String, dynamic>> results = [];
     if (enteredKeyword.isEmpty) {
@@ -76,6 +69,15 @@ class _SearchState extends State<Search> {
     });
   }
 
+  Future<void> test() async {
+    User u = Provider.of<UserService>(context, listen: false).currentUser;
+    List<Cart> cart = [];
+    List<Product> productList = await database.getAllProducts();
+    for (var i in productList) {
+      print(i);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<ShoppingListService>();
@@ -107,6 +109,19 @@ class _SearchState extends State<Search> {
             ElevatedButton(
               onPressed: () => {sortAsc()},
               child: Text("Asc"),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                print("hi");
+                User u = Provider.of<UserService>(context, listen: false)
+                    .currentUser;
+                List<Cart> cart = [];
+                List<Product> productList = await database.getAllProducts();
+                for (var i in productList) {
+                  print(i);
+                }
+              },
+              child: Text("TEST"),
             ),
           ],
         ),

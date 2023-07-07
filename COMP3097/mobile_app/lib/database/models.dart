@@ -61,9 +61,8 @@ class Cart {
 }
 
 class UserCart {
-  final User user;
   final List<Cart> cart;
-  UserCart({required this.user, required this.cart});
+  UserCart({required this.cart});
 }
 
 ///////////////
