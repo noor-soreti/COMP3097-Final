@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/src/models.dart';
 
+import '../src/user_service.dart';
+
 class EditForm extends StatefulWidget {
   final User user;
   const EditForm({Key? key, required this.user}) : super(key: key);
@@ -10,10 +12,17 @@ class EditForm extends StatefulWidget {
 }
 
 class _EditFormState extends State<EditForm> {
+  final UserService _service = UserService();
   final _formKey = GlobalKey<FormState>();
+
+  TextEditingController emailController = TextEditingController();
+  TextEditingController firstnameController = TextEditingController();
+  TextEditingController lastnameController = TextEditingController();
+  List<User> uList = [];
+
   @override
   Widget build(BuildContext context) {
-    print(widget.user.email);
+    User u;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Profile'),
@@ -23,8 +32,8 @@ class _EditFormState extends State<EditForm> {
           child: Column(
             children: [
               TextFormField(
-                initialValue: widget.user.email,
-                // The validator receives the text that the user has entered.
+                controller: emailController..text = widget.user.email,
+                onChanged: (value) => {},
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter some text';
@@ -33,8 +42,8 @@ class _EditFormState extends State<EditForm> {
                 },
               ),
               TextFormField(
-                initialValue: widget.user.firstname,
-                // The validator receives the text that the user has entered.
+                controller: firstnameController..text = widget.user.firstname,
+                onChanged: (value) => {},
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter some text';
@@ -43,8 +52,8 @@ class _EditFormState extends State<EditForm> {
                 },
               ),
               TextFormField(
-                initialValue: widget.user.lastname,
-                // The validator receives the text that the user has entered.
+                controller: lastnameController..text = widget.user.lastname,
+                onChanged: (value) => {print(lastnameController.text)},
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter some text';
@@ -52,7 +61,15 @@ class _EditFormState extends State<EditForm> {
                   return null;
                 },
               ),
-              ElevatedButton(onPressed: () => {{}}, child: Text("Update"))
+              ElevatedButton(
+                  onPressed: () => {
+                        u = User(
+                            email: emailController.text,
+                            firstname: firstnameController.text,
+                            lastname: lastnameController.text),
+                        _service.update(u)
+                      },
+                  child: Text("Update"))
             ],
           )),
     );

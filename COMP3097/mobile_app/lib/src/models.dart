@@ -29,7 +29,7 @@ class Product {
 }
 
 class User {
-  int? id;
+  String? id;
   String email;
   String firstname;
   String lastname;
@@ -43,6 +43,7 @@ class User {
 
   User.fromJSON(Map<String, Object?> json)
       : this(
+          // id: json['id'] as String,
           email: json['email'] as String,
           firstname: json['firstname'] as String,
           lastname: json['lastname'] as String,

@@ -15,4 +15,27 @@ class UserService {
         .map((value) => User.fromJSON(value.data()))
         .first;
   }
+
+  Future update(User user) async {
+    late String id;
+    await db.where("email", isEqualTo: user.email).get().then((value) => {
+          for (var i in value.docs) {id = i.id}
+        });
+
+    return db.doc(id).set({
+      "email": user.email,
+      "firstname": user.firstname,
+      "lastname": user.lastname
+    }, SetOptions(merge: true));
+
+    // db
+    //     .doc(id)
+    //     .update({
+    //       "email": user.email,
+    //       "firstname": user.firstname,
+    //       "lastname": user.lastname
+    //     })
+    //     .then((value) => print("UPDATED"))
+    //     .catchError((error) => print('Failed: $error'));
+  }
 }

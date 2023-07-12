@@ -76,13 +76,13 @@ class MyDatabase extends _$MyDatabase {
 
   /* CART */
 
-  Future<void> getUserCart(User user) async {
-    var t = await (select(cartItem)
-          ..where((tbl) => tbl.userId.equals(user.id!)))
-        .get();
+  // Future<void> getUserCart(User user) async {
+  //   var t = await (select(cartItem)
+  //         ..where((tbl) => tbl.userId.equals(user.id!)))
+  //       .get();
 
-    print(t);
-  }
+  //   print(t);
+  // }
 
   Future<void> userShoppingCart(UserCart userCart) async {
     // final cart = userCart.user;

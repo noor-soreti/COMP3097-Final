@@ -12,9 +12,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  DatabaseReference ref = FirebaseDatabase.instance.ref();
   final AuthService _authService = AuthService();
-
   final UserService _service = UserService();
 
   late String email;
@@ -33,6 +31,7 @@ class _HomeState extends State<Home> {
         "${user.firstname[0].toUpperCase()}${user.firstname.substring(1)}";
     user.lastname =
         "${user.lastname[0].toUpperCase()}${user.lastname.substring(1)}";
+    user.id = _authService.currentUser()!.uid;
   }
 
   @override
