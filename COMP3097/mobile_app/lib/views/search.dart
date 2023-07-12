@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/database/database.dart';
-import 'package:mobile_app/extra/models/user_model.dart';
-import 'package:mobile_app/main.dart';
-import 'package:mobile_app/src/auth_service.dart';
 import 'package:mobile_app/src/user_service.dart';
-import 'package:provider/provider.dart';
 
-import '../../database/models.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -16,6 +10,8 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  UserService _service = UserService();
+
   @override
   initState() {
     super.initState();
@@ -23,8 +19,9 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final userModel = Provider.of<UserModel?>(context);
-    print(userModel);
+    // final userModel = Provider.of<UserModel?>(context);
+
+    // _service.readData().then((value) => print(value));
 
     return const Column(
       children: [Text('hello')],

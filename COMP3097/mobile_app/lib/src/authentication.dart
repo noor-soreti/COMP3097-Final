@@ -1,6 +1,6 @@
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_app/extra/views/login_screen.dart';
+import 'package:mobile_app/views/login_screen.dart';
 
 import 'auth_service.dart';
 

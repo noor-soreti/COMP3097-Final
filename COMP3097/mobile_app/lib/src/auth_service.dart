@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../extra/models/user_model.dart';
+import '../database/extra/models/user_model.dart';
 
 class AuthService {
 // Firebase authentication instance to communicate with Firebase Auth backend
@@ -29,7 +29,6 @@ class AuthService {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       User? user = userCredential.user;
-      print('LOGIN - Success');
       return _userModelFromFirebase(user);
     } catch (e) {
       return null;
@@ -41,7 +40,6 @@ class AuthService {
       UserCredential userCredential = await _auth
           .createUserWithEmailAndPassword(email: username, password: password);
       User? user = userCredential.user;
-      print('REGISTER USER - Success');
       return _userModelFromFirebase(user);
     } catch (e) {
       print(e);

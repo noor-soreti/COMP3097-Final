@@ -6,8 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
-import 'package:mobile_app/auth/api_service.dart';
-import 'package:mobile_app/database/models.dart';
+import 'package:mobile_app/database/api_service.dart';
+import 'package:mobile_app/src/models.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
@@ -38,25 +38,13 @@ class MyDatabase extends _$MyDatabase {
 
   /* USER */
 
-  Future<void> createUser(User user) async {
-    await into(userDB).insert(UserDBCompanion.insert(
-        username: user.username,
-        password: user.password,
-        email: user.email.toString(),
-        firstName: user.firstname.toString(),
-        lastName: user.lastname.toString()));
-    final allUsers = await select(userDB).get();
-    print('Users in DB: $allUsers');
-  }
-
   Future<User> getUser(String username) async {
     final query =
         (select(userDB)..where((tbl) => tbl.username.equals(username)));
 
     return query
         .map((event) => User(
-            username: event.username,
-            password: event.password,
+            // username: event.username,
             email: event.email,
             firstname: event.firstName,
             lastname: event.lastName))
@@ -74,24 +62,12 @@ class MyDatabase extends _$MyDatabase {
     final query = (select(userDB));
     return await query
         .map((q) => User(
-            username: q.username,
-            password: q.password,
+            // username: q.username,
             email: q.email,
             firstname: q.firstName,
             lastname: q.lastName))
         .get();
     // return result.map()....
-  }
-
-  Future updateUser(User user) {
-    return (update(userDB)..where((u) => u.username.equals(user.username)))
-        .write(UserDBCompanion(
-      username: Value(user.username),
-      password: Value(user.password),
-      firstName: Value(user.firstname.toString()),
-      lastName: Value(user.lastname.toString()),
-      email: Value(user.email.toString()),
-    ));
   }
 
   Future deleteUser(String username) async {

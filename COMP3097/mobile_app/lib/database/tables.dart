@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 
-import 'models.dart';
+import '../src/models.dart';
 
 class Todos extends Table {
   IntColumn get id => integer().autoIncrement()();

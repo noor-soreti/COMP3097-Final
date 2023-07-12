@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/main.dart';
 
-import '../../database/models.dart';
+import '../../../src/models.dart';
 
 class UserService with ChangeNotifier {
   late User _currentUser;
@@ -70,7 +70,6 @@ class UserService with ChangeNotifier {
   Future<String> createUser(User user) async {
     String result = "ok";
     try {
-      await database.createUser(user);
       notifyListeners();
     } catch (e) {
       result = "did not create";

@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:mobile_app/database/user_database.dart';
 import 'package:mobile_app/main.dart';
-import 'package:mobile_app/extra/models/shopping_list_model.dart';
+import 'package:mobile_app/database/extra/models/shopping_list_model.dart';
 
 class ShoppingListService with ChangeNotifier {
   List<ShoppingList> _list = [];

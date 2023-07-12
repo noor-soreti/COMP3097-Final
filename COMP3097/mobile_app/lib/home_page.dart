@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/database/database.dart';
-import 'package:mobile_app/extra/models/user_model.dart';
-import 'package:mobile_app/extra/views/profile.dart';
-import 'package:mobile_app/extra/views/search.dart';
-import 'package:mobile_app/extra/views/search_screen.dart';
+import 'package:mobile_app/database/extra/models/user_model.dart';
+import 'package:mobile_app/views/profile.dart';
+import 'package:mobile_app/views/search.dart';
+import 'package:mobile_app/views/search_screen.dart';
 import 'package:mobile_app/src/auth_service.dart';
 
 class HomePage extends StatefulWidget {

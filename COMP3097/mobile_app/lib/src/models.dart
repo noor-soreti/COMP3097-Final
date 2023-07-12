@@ -30,26 +30,27 @@ class Product {
 
 class User {
   int? id;
-  String username;
-  String password;
-  String? firstname;
-  String? lastname;
-  String? email;
+  String email;
+  String firstname;
+  String lastname;
 
-  User(
-      {this.id,
-      required this.username,
-      required this.password,
-      this.firstname,
-      this.lastname,
-      this.email});
+  User({
+    this.id,
+    required this.email,
+    required this.firstname,
+    required this.lastname,
+  });
 
-  static User fromJSON(Map<String, Object> json) => User(
-      username: json['username'] as String,
-      password: json['password'] as String,
-      firstname: json['firstname'] as String,
-      lastname: json['lastname'] as String,
-      email: json['email'] as String);
+  User.fromJSON(Map<String, Object?> json)
+      : this(
+          email: json['email'] as String,
+          firstname: json['firstname'] as String,
+          lastname: json['lastname'] as String,
+        );
+
+  Map<String, Object?> toJSON() {
+    return {'email': email, 'firstname': firstname, 'lastname': lastname};
+  }
 }
 
 class Cart {

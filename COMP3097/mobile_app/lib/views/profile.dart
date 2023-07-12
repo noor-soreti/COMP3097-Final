@@ -1,12 +1,10 @@
-import 'dart:math';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_app/extra/services/shopping_list_services.dart';
-import 'package:mobile_app/main.dart';
 import 'package:mobile_app/src/auth_service.dart';
 import 'package:mobile_app/src/user_service.dart';
-import 'package:provider/provider.dart';
+
+import '../src/models.dart';
+import 'edit_form.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -17,18 +15,28 @@ class _HomeState extends State<Home> {
   DatabaseReference ref = FirebaseDatabase.instance.ref();
   final AuthService _authService = AuthService();
 
-  final UserService userService = UserService();
+  final UserService _service = UserService();
 
   late String email;
+  late User user;
 
   @override
   void initState() {
+    test();
     super.initState();
+  }
+
+  Future test() async {
+    email = _authService.currentUser()!.email!;
+    user = await _service.readUserData(email);
+    user.firstname =
+        "${user.firstname[0].toUpperCase()}${user.firstname.substring(1)}";
+    user.lastname =
+        "${user.lastname[0].toUpperCase()}${user.lastname.substring(1)}";
   }
 
   @override
   Widget build(BuildContext context) {
-    email = _authService.currentUser()!.email!;
     return Column(children: [
       const SizedBox(
         height: 55,
@@ -65,20 +73,27 @@ class _HomeState extends State<Home> {
             Row(
               children: [
                 Text(
-                  "Password: ",
+                  "Full name: ",
                   style: TextStyle(
                     fontSize: 15,
                   ),
                 ),
                 Text(
-                  "**password** ",
+                  "${user.firstname} ${user.lastname}",
                   style: TextStyle(
                     fontSize: 15,
                   ),
                 )
               ],
             ),
-            ElevatedButton(onPressed: () => {}, child: Text('Edit'))
+            ElevatedButton(
+                onPressed: () => {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EditForm(user: user)))
+                    },
+                child: Text('Edit'))
           ],
         ),
       ),

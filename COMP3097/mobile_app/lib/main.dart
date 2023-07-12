@@ -1,10 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/database/database.dart';
 import 'package:mobile_app/src/auth_service.dart';
 import 'package:mobile_app/src/wrapper.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'extra/models/user_model.dart';
+import 'database/extra/models/user_model.dart';
 import 'firebase_options.dart';
 import 'package:firebase_database/firebase_database.dart';
 // new
