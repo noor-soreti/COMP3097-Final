@@ -15,7 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Widget page = Home();
+  Widget page = Profile();
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
         ListTile(
           title: const Text('Home'),
           onTap: () => setState(() {
-            page = Home();
+            page = Profile();
           }),
         ),
         ListTile(

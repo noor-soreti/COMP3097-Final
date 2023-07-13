@@ -23,7 +23,7 @@ class _SideMenuState extends State<SideMenu> {
     Widget page;
     switch (selectedIndex) {
       case 0:
-        page = Home();
+        page = Profile();
         break;
       case 1:
         page = Placeholder();

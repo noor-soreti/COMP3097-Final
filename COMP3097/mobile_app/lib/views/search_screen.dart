@@ -21,7 +21,6 @@
 //   void initState() {
 //     _foundProduct = _values;
 //     setState(() {
-//       print("hello");
 //       productList();
 //     });
 //     super.initState();
@@ -36,38 +35,38 @@
 //     }
 //   }
 
-//   void _runFilter(String enteredKeyword) {
-//     List<Map<String, dynamic>> results = [];
-//     if (enteredKeyword.isEmpty) {
-//       results = _values;
-//     } else {
-//       results = _values
-//           .where(
-//               (user) => user["product"].toLowerCase().contains(enteredKeyword))
-//           .toList();
-//     }
-//     setState(() {
-//       _foundProduct = results;
-//     });
-//   }
+  // void _runFilter(String enteredKeyword) {
+  //   List<Map<String, dynamic>> results = [];
+  //   if (enteredKeyword.isEmpty) {
+  //     results = _values;
+  //   } else {
+  //     results = _values
+  //         .where(
+  //             (user) => user["product"].toLowerCase().contains(enteredKeyword))
+  //         .toList();
+  //   }
+  //   setState(() {
+  //     _foundProduct = results;
+  //   });
+  // }
 
-//   void sortDesc() {
-//     _foundProduct.sort((a, b) => (b["price"]).compareTo(
-//           a["price"],
-//         ));
-//     setState(() {
-//       _values = _foundProduct;
-//     });
-//   }
+  // void sortDesc() {
+  //   _foundProduct.sort((a, b) => (b["price"]).compareTo(
+  //         a["price"],
+  //       ));
+  //   setState(() {
+  //     _values = _foundProduct;
+  //   });
+  // }
 
-//   void sortAsc() {
-//     _foundProduct.sort((a, b) => (a["price"]).compareTo(
-//           b["price"],
-//         ));
-//     setState(() {
-//       _values = _foundProduct;
-//     });
-//   }
+  // void sortAsc() {
+  //   _foundProduct.sort((a, b) => (a["price"]).compareTo(
+  //         b["price"],
+  //       ));
+  //   setState(() {
+  //     _values = _foundProduct;
+  //   });
+  // }
 
 //   Future<void> test() async {
 //     User u = Provider.of<UserService>(context, listen: false).currentUser;
@@ -99,32 +98,32 @@
 //                 labelText: 'Search', suffixIcon: Icon(Icons.search)),
 //           ),
 //         ),
-//         Row(
-//           children: [
-//             Text("SORT (price): "),
-//             ElevatedButton(
-//               onPressed: () => {sortDesc()},
-//               child: Text("Desc"),
-//             ),
-//             ElevatedButton(
-//               onPressed: () => {sortAsc()},
-//               child: Text("Asc"),
-//             ),
-//             ElevatedButton(
-//               onPressed: () async {
-//                 print("hi");
-//                 User u = Provider.of<UserService>(context, listen: false)
-//                     .currentUser;
-//                 List<Cart> cart = [];
-//                 List<Product> productList = await database.getAllProducts();
-//                 for (var i in productList) {
-//                   print(i);
-//                 }
-//               },
-//               child: Text("TEST"),
-//             ),
-//           ],
-//         ),
+        // Row(
+        //   children: [
+        //     Text("SORT (price): "),
+        //     ElevatedButton(
+        //       onPressed: () => {sortDesc()},
+        //       child: Text("Desc"),
+        //     ),
+        //     ElevatedButton(
+        //       onPressed: () => {sortAsc()},
+        //       child: Text("Asc"),
+        //     ),
+        //     ElevatedButton(
+        //       onPressed: () async {
+        //         print("hi");
+        //         User u = Provider.of<UserService>(context, listen: false)
+        //             .currentUser;
+        //         List<Cart> cart = [];
+        //         List<Product> productList = await database.getAllProducts();
+        //         for (var i in productList) {
+        //           print(i);
+        //         }
+        //       },
+        //       child: Text("TEST"),
+        //     ),
+        //   ],
+        // ),
 //         Expanded(
 //           child: ListView.builder(
 //             itemCount: _foundProduct.length,
@@ -135,16 +134,16 @@
 //               margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
 //               child: ListTile(
 //                 leading: ElevatedButton(
-//                     onPressed: () {
-//                       print(_foundProduct[index]['id']);
-//                       var list = ShoppingList(
-//                           username: currentUser.username,
-//                           name: _foundProduct[index]['product'],
-//                           price: double.parse(_foundProduct[index]['price']),
-//                           quantity: 0);
+                    // onPressed: () {
+                      // print(_foundProduct[index]['id']);
+                      // var list = ShoppingList(
+                      //     username: currentUser.username,
+                      //     name: _foundProduct[index]['product'],
+                      //     price: double.parse(_foundProduct[index]['price']),
+                      //     quantity: 0);
 
-//                       appState.createShoppingList(list);
-//                     },
+                      // appState.createShoppingList(list);
+                    // },
 //                     child: Icon(Icons.add)),
 //                 title: Text(_foundProduct[index]["product"],
 //                     style: TextStyle(color: Colors.white)),

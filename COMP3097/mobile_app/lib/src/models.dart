@@ -9,22 +9,20 @@ class ProductCategory {
 }
 
 class Product {
-  int? id;
+  int id;
   String name;
-  String description;
   double price;
 
-  Product(
-      {this.id,
-      required this.name,
-      required this.description,
-      required this.price});
+  Product({required this.id, required this.name, required this.price});
 
-  factory Product.fromJSON(Map<String, Object> json) {
-    return Product(
-        name: json['name'] as String,
-        description: json['description'] as String,
-        price: json['price'] as double); // *****
+  Product.fromJSON(Map<String, Object?> json)
+      : this(
+            id: json['id'] as int,
+            name: json['name'] as String,
+            price: json['price'] as double); // *****
+
+  Map<String, Object?> toJSON() {
+    return {'id': id, 'name': name, 'price': price};
   }
 }
 

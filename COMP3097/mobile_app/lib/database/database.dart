@@ -96,15 +96,15 @@ class MyDatabase extends _$MyDatabase {
 
   /* PRODUCT */
 
-  Future<List<Product>> getAllProducts() async {
-    final query = select(productDB);
-    print("QUERY");
+  // Future<List<Product>> getAllProducts() async {
+  //   final query = select(productDB);
+  //   print("QUERY");
 
-    return await query
-        .map((q) => Product(
-            id: q.id, name: q.name, description: q.description, price: q.price))
-        .get();
-  }
+  //   return await query
+  //       .map((q) => Product(
+  //           id: q.id, name: q.name, description: q.description, price: q.price))
+  //       .get();
+  // }
 
   Future<void> insertProduct() async {
     var data = await rootBundle.loadString("assets/top-1k-ingredients.csv");
@@ -129,12 +129,12 @@ class MyDatabase extends _$MyDatabase {
     }
   }
 
-  Future<void> getProduct(String product) async {
-    final query = await getAllProducts;
+  // Future<void> getProduct(String product) async {
+  //   final query = await getAllProducts;
 
-    final test = await select(productDB).get(); // where product.name == product
-    print(test);
-  }
+  //   final test = await select(productDB).get(); // where product.name == product
+  //   print(test);
+  // }
 
   Future<void> x(int id) async {
     http.Response response = await http.get(Uri.parse(

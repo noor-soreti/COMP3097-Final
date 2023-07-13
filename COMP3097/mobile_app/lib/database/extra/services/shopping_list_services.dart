@@ -10,8 +10,8 @@ class ShoppingListService with ChangeNotifier {
 
   Future<String> getShoppingList(String username) async {
     try {
-      var t = await database.getAllProducts;
-      print(t);
+      // var t = await database.getAllProducts;
+      // print(t);
       // _list = await UserDatabase.instance
       //     .getShoppingList(username)
       //     .then((value) => value);

@@ -6,32 +6,33 @@ import 'package:mobile_app/src/user_service.dart';
 import '../src/models.dart';
 import 'edit_form.dart';
 
-class Home extends StatefulWidget {
+class Profile extends StatefulWidget {
   @override
-  State<Home> createState() => _HomeState();
+  State<Profile> createState() => _ProfileState();
 }
 
-class _HomeState extends State<Home> {
+class _ProfileState extends State<Profile> {
   final AuthService _authService = AuthService();
   final UserService _service = UserService();
 
-  late String email;
+  late String email = _authService.currentUser()!.email!;
   late User user;
 
   @override
   void initState() {
-    test();
+    initUser();
     super.initState();
   }
 
-  Future test() async {
-    email = _authService.currentUser()!.email!;
+  Future initUser() async {
     user = await _service.readUserData(email);
-    user.firstname =
-        "${user.firstname[0].toUpperCase()}${user.firstname.substring(1)}";
-    user.lastname =
-        "${user.lastname[0].toUpperCase()}${user.lastname.substring(1)}";
-    user.id = _authService.currentUser()!.uid;
+    setState(() {
+      user.firstname =
+          "${user.firstname[0].toUpperCase()}${user.firstname.substring(1)}";
+      user.lastname =
+          "${user.lastname[0].toUpperCase()}${user.lastname.substring(1)}";
+      user.id = _authService.currentUser()!.uid;
+    });
   }
 
   @override
@@ -86,11 +87,12 @@ class _HomeState extends State<Home> {
               ],
             ),
             ElevatedButton(
-                onPressed: () => {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => EditForm(user: user)))
+                onPressed: () async => {
+                      await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => EditForm(user: user)))
+                          .then((value) => initUser()),
                     },
                 child: Text('Edit'))
           ],

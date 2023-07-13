@@ -18,7 +18,14 @@ class _EditFormState extends State<EditForm> {
   TextEditingController emailController = TextEditingController();
   TextEditingController firstnameController = TextEditingController();
   TextEditingController lastnameController = TextEditingController();
-  List<User> uList = [];
+
+  @override
+  void dispose() {
+    super.dispose();
+    emailController.dispose();
+    firstnameController.dispose();
+    lastnameController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +40,6 @@ class _EditFormState extends State<EditForm> {
             children: [
               TextFormField(
                 controller: emailController..text = widget.user.email,
-                onChanged: (value) => {},
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter some text';
@@ -43,7 +49,6 @@ class _EditFormState extends State<EditForm> {
               ),
               TextFormField(
                 controller: firstnameController..text = widget.user.firstname,
-                onChanged: (value) => {},
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter some text';
@@ -53,7 +58,7 @@ class _EditFormState extends State<EditForm> {
               ),
               TextFormField(
                 controller: lastnameController..text = widget.user.lastname,
-                onChanged: (value) => {print(lastnameController.text)},
+                // onChanged: (value) => {print(lastnameController.text)},
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter some text';
@@ -67,6 +72,28 @@ class _EditFormState extends State<EditForm> {
                             email: emailController.text,
                             firstname: firstnameController.text,
                             lastname: lastnameController.text),
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Confirm'),
+                            content: const Text('Save Changes?'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.pop(context, 'Cancel'),
+                                child: const Text('Cancel'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  var nav = Navigator.of(context);
+                                  nav.pop();
+                                  nav.pop();
+                                },
+                                child: const Text('Save'),
+                              ),
+                            ],
+                          ),
+                        ),
                         _service.update(u)
                       },
                   child: Text("Update"))
