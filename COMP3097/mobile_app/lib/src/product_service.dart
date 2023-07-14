@@ -7,4 +7,8 @@ class ProductService {
   Future<Iterable<Product>> readData() async {
     return (await db.get()).docs.map((value) => Product.fromJSON(value.data()));
   }
+
+  
+
+
 }

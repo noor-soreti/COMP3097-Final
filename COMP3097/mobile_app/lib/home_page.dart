@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
         ListTile(
           title: const Text('Search'),
           onTap: () => setState(() {
-            page = SearchScreen();
+            page = SearchScreen(userModel: widget.userModel);
           }),
         ),
         ListTile(

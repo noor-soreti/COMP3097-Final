@@ -13,7 +13,14 @@ class UserService {
     return (await db.get())
         .docs
         .map((value) => User.fromJSON(value.data()))
-        .first;
+        .firstWhere((element) => element.email == email);
+  }
+
+  Future readUserDataWithList(String email) async {
+    return (await db.get())
+        .docs
+        .map((value) => User.fromJSONWithList(value.data()))
+        .firstWhere((element) => element.email == email);
   }
 
   Future update(User user) async {
@@ -25,17 +32,8 @@ class UserService {
     return db.doc(id).set({
       "email": user.email,
       "firstname": user.firstname,
-      "lastname": user.lastname
+      "lastname": user.lastname,
+      "product": user.product!.map((e) => e.toJSON()).toList()
     }, SetOptions(merge: true));
-
-    // db
-    //     .doc(id)
-    //     .update({
-    //       "email": user.email,
-    //       "firstname": user.firstname,
-    //       "lastname": user.lastname
-    //     })
-    //     .then((value) => print("UPDATED"))
-    //     .catchError((error) => print('Failed: $error'));
   }
 }

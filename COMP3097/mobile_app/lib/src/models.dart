@@ -31,9 +31,11 @@ class User {
   String email;
   String firstname;
   String lastname;
+  List<dynamic>? product;
 
   User({
     this.id,
+    this.product,
     required this.email,
     required this.firstname,
     required this.lastname,
@@ -48,7 +50,28 @@ class User {
         );
 
   Map<String, Object?> toJSON() {
-    return {'email': email, 'firstname': firstname, 'lastname': lastname};
+    return {
+      'email': email,
+      'firstname': firstname,
+      'lastname': lastname,
+    };
+  }
+
+  User.fromJSONWithList(Map<String, Object?> json)
+      : this(
+            // id: json['id'] as String,
+            email: json['email'] as String,
+            firstname: json['firstname'] as String,
+            lastname: json['lastname'] as String,
+            product: json['product'] as List<dynamic>);
+
+  Map<String, Object?> toJSOWithList() {
+    return {
+      'email': email,
+      'firstname': firstname,
+      'lastname': lastname,
+      'product': product
+    };
   }
 }
 

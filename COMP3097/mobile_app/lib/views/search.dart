@@ -1,32 +1,42 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:mobile_app/src/product_service.dart';
+import 'package:mobile_app/src/user_service.dart';
 
+import '../database/extra/models/user_model.dart';
+import '../src/auth_service.dart';
 import '../src/models.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({super.key});
+  final UserModel userModel;
+
+  const SearchScreen({Key? key, required this.userModel}) : super(key: key);
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  ProductService _service = ProductService();
+  final AuthService _authService = AuthService();
+
+  ProductService _productService = ProductService();
+  UserService _userService = UserService();
+
   List<Map<String, dynamic>> _values = [];
   List<Map<String, dynamic>> _foundProduct = [];
-  List<Map<String, dynamic>> shoppingList = [];
 
   @override
   void initState() {
     _foundProduct = _values;
-    setState(() {
-      productList();
-    });
+    // setState(() {
+    productList();
+    // });
     super.initState();
   }
 
   Future productList() async {
-    var element = await _service.readData();
+    var element = await _productService.readData();
 
     for (var i in element) {
       print(i.id);
@@ -102,13 +112,30 @@ class _SearchScreenState extends State<SearchScreen> {
             margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
             child: ListTile(
               leading: ElevatedButton(
-                onPressed: () {
-                  print(_foundProduct[index]['name']);
-                  // Product(
-                  //   id: _foundProduct[index]['id'],
-                  //   name: _foundProduct[index]['name'],
-                  //   price: double.parse(_foundProduct[index]['price']),
-                  // );
+                onPressed: () async {
+                  Product p = Product(
+                    id: _foundProduct[index]['id'],
+                    name: _foundProduct[index]['name'],
+                    price: _foundProduct[index]['price'],
+                  );
+
+                  String email = _authService.currentUser()!.email!;
+                  User u = await _userService.readUserDataWithList(email);
+
+                  List<Product> product = [];
+
+                  u.product?.forEach((element) {
+                    Product pro = Product(
+                        id: element['id'],
+                        name: element['name'],
+                        price: element['price']);
+                    product.add(pro);
+                  });
+                  product.add(p);
+
+                  u.product = product;
+
+                  _userService.update(u);
                 },
                 child: Icon(Icons.add),
               ),
