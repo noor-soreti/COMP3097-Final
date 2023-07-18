@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../database/extra/models/user_model.dart';
+import '../src/user_model.dart';
 
 class AuthService {
 // Firebase authentication instance to communicate with Firebase Auth backend

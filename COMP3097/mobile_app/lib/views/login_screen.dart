@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/src/user_service.dart';
+import 'package:mobile_app/service/user_service.dart';
 import 'package:flutter_login/flutter_login.dart';
 
-import '../src/auth_service.dart';
+import '../auth/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
     var newUser = <String, dynamic>{
       'email': data.name,
       'firstname': data.additionalSignupData!['firstname'],
-      'lastname': data.additionalSignupData!['lastname']
+      'lastname': data.additionalSignupData!['lastname'],
     };
 
     await _service.addUser(newUser);

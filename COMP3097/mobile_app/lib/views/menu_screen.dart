@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/views/profile.dart';
 import 'package:mobile_app/views/shopping_cart.dart';
-import 'package:mobile_app/views/search_screen.dart';
 
 class SideMenu extends StatefulWidget {
   SideMenu({super.key, required this.username});

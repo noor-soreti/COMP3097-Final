@@ -1,27 +1,21 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:mobile_app/src/product_service.dart';
-import 'package:mobile_app/src/user_service.dart';
+import 'package:mobile_app/service/product_service.dart';
+import 'package:mobile_app/service/user_service.dart';
+import 'package:mobile_app/src/user_notifier.dart';
+import 'package:provider/provider.dart';
 
-import '../database/extra/models/user_model.dart';
-import '../src/auth_service.dart';
+import '../auth/auth_service.dart';
 import '../src/models.dart';
 
 class SearchScreen extends StatefulWidget {
-  final UserModel userModel;
-
-  const SearchScreen({Key? key, required this.userModel}) : super(key: key);
-
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  final AuthService _authService = AuthService();
-
   ProductService _productService = ProductService();
-  UserService _userService = UserService();
 
   List<Map<String, dynamic>> _values = [];
   List<Map<String, dynamic>> _foundProduct = [];
@@ -29,19 +23,20 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void initState() {
     _foundProduct = _values;
-    // setState(() {
     productList();
-    // });
     super.initState();
   }
 
   Future productList() async {
     var element = await _productService.readData();
 
-    for (var i in element) {
-      print(i.id);
-      _values.add({'id': i.id, 'name': i.name, 'price': i.price});
-    }
+    setState(() {
+      for (var i in element) {
+        _values.add(
+          {'id': i.id, 'name': i.name, 'price': i.price},
+        );
+      }
+    });
   }
 
   void _runFilter(String enteredKeyword) {
@@ -78,7 +73,6 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final userModel = Provider.of<UserModel?>(context);
     return Column(
       children: [
         Padding(
@@ -107,11 +101,17 @@ class _SearchScreenState extends State<SearchScreen> {
           itemCount: _foundProduct.length,
           itemBuilder: (context, index) => Card(
             key: ValueKey(_foundProduct[index]['id']),
-            color: Colors.blue,
+            color:
+                // _foundProduct[index]['id'] == "" ?
+                Colors.blue,
+            // : Colors.green
             elevation: 4,
             margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
             child: ListTile(
               leading: ElevatedButton(
+                // style: ButtonStyle(
+                //   backgroundColor: MaterialStateProperty.all(Colors.green),
+                // ),
                 onPressed: () async {
                   Product p = Product(
                     id: _foundProduct[index]['id'],
@@ -119,25 +119,14 @@ class _SearchScreenState extends State<SearchScreen> {
                     price: _foundProduct[index]['price'],
                   );
 
-                  String email = _authService.currentUser()!.email!;
-                  User u = await _userService.readUserDataWithList(email);
-
-                  List<Product> product = [];
-
-                  u.product?.forEach((element) {
-                    Product pro = Product(
-                        id: element['id'],
-                        name: element['name'],
-                        price: element['price']);
-                    product.add(pro);
-                  });
-                  product.add(p);
-
-                  u.product = product;
-
-                  _userService.update(u);
+                  Provider.of<UserNotifier>(context, listen: false)
+                      .addProduct(p);
                 },
-                child: Icon(Icons.add),
+                child:
+                    //  _foundProduct[index]['id'] == ""
+                    //     ? Icon(Icons.remove)
+                    //     :
+                    Icon(Icons.add),
               ),
               title: Text(_foundProduct[index]['name'],
                   style: TextStyle(color: Colors.white)),
@@ -152,3 +141,19 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 }
+
+
+// addProduct(Product p) async {
+  //   await Provider.of<UserNotifier>(context, listen: false).addProduct(p);
+  // String email = _authService.currentUser()!.email!;
+  // User u = await _userService.readUserDataWithList(email);
+  // List<Product> product = [];
+  // u.product?.forEach((element) {
+  //   Product pro = Product(
+  //       id: element['id'], name: element['name'], price: element['price']);
+  //   product.add(pro);
+  // });
+  // product.add(p);
+  // u.product = product;
+  // _userService.addProduct(u);
+  // }

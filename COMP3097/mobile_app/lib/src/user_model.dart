@@ -1,5 +1,3 @@
-import 'package:mobile_app/database/extra/models/shopping_list_model.dart';
-
 const String usertable = 'user';
 
 class UserFields {

@@ -1,128 +1,138 @@
-// import 'package:flutter/material.dart';
-// import 'package:mobile_app/database/extra/models/shopping_list_model.dart';
-// import 'package:mobile_app/database/extra/services/shopping_list_services.dart';
-// import 'package:provider/provider.dart';
+import 'dart:math';
 
-// import '../database/extra/services/user_services.dart';
+import 'package:flutter/material.dart';
+import 'package:mobile_app/service/user_service.dart';
+import 'package:mobile_app/src/models.dart';
+import 'package:mobile_app/src/user_notifier.dart';
+import 'package:provider/provider.dart';
 
-// class MyList extends StatefulWidget {
-//   @override
-//   State<MyList> createState() => _MyListState();
-// }
+class ShoppingCart extends StatefulWidget {
+  const ShoppingCart({super.key});
 
-// class _MyListState extends State<MyList> {
-//   List<ShoppingList> userList = [];
-//   // List<double> currentTotal = [];
-//   double subTotal = 0.00;
-//   double total = 0.00;
-//   double tax = 0;
-//   bool _edit = false;
-//   int increment = 0;
+  @override
+  State<ShoppingCart> createState() => _ShoppingCartState();
+}
 
-//   @override
-//   void initState() {
-//     super.initState();
-//   }
+class _ShoppingCartState extends State<ShoppingCart> {
+  List<Product> productList = [];
+  List<double> currentTotal = [];
+  double subTotal = 0.00;
+  double total = 0.00;
+  double tax = 0;
+  bool _edit = false;
+  int increment = 0;
 
-//   @override
-//   Widget build(BuildContext context) {
-//     var appState = context.watch<ShoppingListService>();
-//     var ctex = context.watch<UserService>();
-//     var currentUser = ctex.currentUser;
+  @override
+  void initState() {
+    test();
 
-//     appState.getShoppingList(currentUser.username).then((value) => {
-//           userList = appState.list,
-//         });
-//     appState.getPrice(currentUser.username).then((value) => total =
-//         appState.currentTotal.reduce((value, element) => value + element));
+    super.initState();
+  }
 
-//     tax = (total * .13);
-//     subTotal = total + tax;
+  test() async {
+    var i =
+        await Provider.of<UserNotifier>(context, listen: false).getUserCart();
 
-//     return Column(
-//       children: [
-//         const SizedBox(
-//           height: 55,
-//         ),
-//         Row(
-//           children: [
-//             TextButton(
-//               child: _edit == false
-//                   ? Text("Edit", style: TextStyle(fontWeight: FontWeight.w600))
-//                   : Text("Done"),
-//               onPressed: () {
-//                 _edit = !_edit;
-//               },
-//             ),
-//           ],
-//         ),
-//         // WORKING ROW
-//         Container(
-//           padding: EdgeInsets.only(left: 20, right: 20),
-//           child: Column(
-//             children: [
-//               Row(
-//                 children: [
-//                   Text("SUBTOTAL",
-//                       style:
-//                           TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
-//                   SizedBox(
-//                     width: 120,
-//                   ),
-//                   Text("\$${subTotal.toStringAsFixed(2)}",
-//                       style: TextStyle(fontSize: 15)),
-//                 ],
-//               ),
-//               Row(
-//                 children: [
-//                   Text("TOTAL",
-//                       style:
-//                           TextStyle(fontSize: 12, fontWeight: FontWeight.w300)),
-//                   SizedBox(
-//                     width: 167,
-//                   ),
-//                   Text("\$${total.toStringAsFixed(2)}"),
-//                 ],
-//               ),
-//               Row(
-//                 children: [
-//                   Text("TAX (13% HST)",
-//                       style:
-//                           TextStyle(fontSize: 12, fontWeight: FontWeight.w300)),
-//                   SizedBox(
-//                     width: 117,
-//                   ),
-//                   Text("\$${tax.toStringAsFixed(2)}"),
-//                 ],
-//               ),
-//             ],
-//           ),
-//         ),
-//         Expanded(
-//           child: userList.length > 0
-//               ? ListView.builder(
-//                   scrollDirection: Axis.vertical,
-//                   itemCount: userList.length,
-//                   itemBuilder: (context, index) {
-//                     return Container(
-//                       child: Card(
-//                           child: ListTile(
-//                               leading:
-//                                   Text("\$${userList[index].price.toString()}"),
-//                               title: Text(userList[index].name),
-//                               trailing: !_edit
-//                                   ? Icon(null)
-//                                   : IconButton(
-//                                       onPressed: () {
-//                                         appState.deleteShoppingList(
-//                                             userList[index]);
-//                                       },
-//                                       icon: Icon(Icons.delete)))),
-//                     );
-//                   })
-//               : const Center(child: Text("No Items")),
-//         ),
-//       ],
-//     );
-//   }
-// }
+    for (var t in i['product']) {
+      Product p = Product(id: t['id'], name: t['name'], price: t['price']);
+      productList.add(p);
+    }
+
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    
+
+    return Consumer<UserNotifier>(
+      builder: (context, value, child) {
+        return Column(
+          children: [
+            Row(
+              children: [
+                TextButton(
+                  child: _edit == false
+                      ? Text("Edit",
+                          style: TextStyle(fontWeight: FontWeight.w600))
+                      : Text("Done"),
+                  onPressed: () {
+                    setState(() {
+                      _edit = !_edit;
+                    });
+                  },
+                ),
+              ],
+            ),
+            Container(
+              padding: EdgeInsets.only(left: 20),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text("SUBTOTAL",
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.w700)),
+                      SizedBox(
+                        width: 120,
+                      ),
+                      Text("\$${subTotal.toStringAsFixed(2)}",
+                          style: TextStyle(fontSize: 15)),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text("TOTAL",
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.w300)),
+                      SizedBox(
+                        width: 167,
+                      ),
+                      Text("\$${total.toStringAsFixed(2)}"),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text("TAX (13% HST)",
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.w300)),
+                      SizedBox(
+                        width: 117,
+                      ),
+                      Text("\$${tax.toStringAsFixed(2)}"),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+                child: productList.isNotEmpty
+                    ? ListView.builder(
+                        itemCount: productList.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            child: ListTile(
+                              leading: !_edit
+                                  ? Icon(null)
+                                  : IconButton(
+                                      onPressed: () {
+                                        Provider.of<UserNotifier>(context,
+                                                listen: false)
+                                            .deleteProduct(productList[index]);
+                                      },
+                                      icon: Icon(Icons.delete),
+                                    ),
+                              title: Text(
+                                  "${productList[index].name[0].toUpperCase()}${productList[index].name.substring(1)} "),
+                              trailing: Text("\$${productList[index].price}"),
+                            ),
+                          );
+                        })
+                    : Center(child: Text("No Items")))
+          ],
+        );
+      },
+    );
+  }
+}

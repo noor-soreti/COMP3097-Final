@@ -1,28 +1,42 @@
 import 'dart:ffi';
 
-class ProductCategory {
-  int? id;
-  String name;
-  String description;
-
-  ProductCategory({this.id, required this.name, required this.description});
-}
-
 class Product {
   int id;
   String name;
   double price;
+  int? quantity;
 
-  Product({required this.id, required this.name, required this.price});
+  Product(
+      {required this.id,
+      required this.name,
+      required this.price,
+      this.quantity});
 
-  Product.fromJSON(Map<String, Object?> json)
-      : this(
-            id: json['id'] as int,
-            name: json['name'] as String,
-            price: json['price'] as double); // *****
+  factory Product.fromJSON(Map<String, Object?> json) {
+    // if (json['quantity'] != null) {
+    return Product(
+        id: json['id'] as int,
+        name: json['name'] as String,
+        price: json['price'] as double,
+        quantity: json['quantity'] as int);
+    // }
+    // return Product(
+    //     id: json['id'] as int,
+    //     name: json['name'] as String,
+    //     price: json['price'] as double);
+  } // *****
 
   Map<String, Object?> toJSON() {
-    return {'id': id, 'name': name, 'price': price};
+    return {'id': id, 'name': name, 'price': price, 'quantity': quantity};
+  }
+
+  bool contains(List<Product> list, Product p) {
+    for (var i in list) {
+      if (i.id == p.id) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 
@@ -31,7 +45,7 @@ class User {
   String email;
   String firstname;
   String lastname;
-  List<dynamic>? product;
+  List<Product>? product;
 
   User({
     this.id,
@@ -49,56 +63,16 @@ class User {
           lastname: json['lastname'] as String,
         );
 
-  Map<String, Object?> toJSON() {
-    return {
-      'email': email,
-      'firstname': firstname,
-      'lastname': lastname,
-    };
+  Object? test(Map<String, Object?> json) {
+    return json['product'];
   }
 
-  User.fromJSONWithList(Map<String, Object?> json)
+  User.fromJSONToList(Map<String, Object?> json)
       : this(
+
             // id: json['id'] as String,
             email: json['email'] as String,
             firstname: json['firstname'] as String,
             lastname: json['lastname'] as String,
-            product: json['product'] as List<dynamic>);
-
-  Map<String, Object?> toJSOWithList() {
-    return {
-      'email': email,
-      'firstname': firstname,
-      'lastname': lastname,
-      'product': product
-    };
-  }
-}
-
-class Cart {
-  int id;
-  String product;
-  int quantity;
-
-  Cart({required this.id, required this.product, required this.quantity});
-}
-
-class UserCart {
-  final List<Cart> cart;
-  UserCart({required this.cart});
-}
-
-///////////////
-
-class Item {
-  int? id;
-  int? quantity;
-  String item;
-  String price;
-
-  Item({this.id, this.quantity, required this.item, required this.price});
-
-  factory Item.fromJson(Map<String, dynamic> json) {
-    return Item(item: json['item'], price: json['price']);
-  }
+            product: json['product'] as List<Product>);
 }

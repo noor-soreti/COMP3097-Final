@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/database/database.dart';
-import 'package:mobile_app/database/extra/models/user_model.dart';
+import 'package:mobile_app/src/user_model.dart';
+import 'package:mobile_app/src/user_notifier.dart';
 import 'package:mobile_app/views/profile.dart';
 import 'package:mobile_app/views/search.dart';
-import 'package:mobile_app/views/search_screen.dart';
-import 'package:mobile_app/src/auth_service.dart';
+import 'package:mobile_app/views/shopping_cart.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
-  final UserModel userModel;
-  const HomePage({Key? key, required this.userModel}) : super(key: key);
+  const HomePage({super.key, required UserModel userModel});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -18,9 +17,17 @@ class _HomePageState extends State<HomePage> {
   Widget page = Profile();
 
   @override
+  void initState() {
+    getUser();
+    super.initState();
+  }
+
+  Future getUser() async {
+    await Provider.of<UserNotifier>(context, listen: false).getUser();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // widget.userModel.id;
-    final AuthService authService = AuthService();
     return Scaffold(
       appBar: AppBar(
         title: const Text('ShopU'),
@@ -38,18 +45,19 @@ class _HomePageState extends State<HomePage> {
         ListTile(
           title: const Text('Search'),
           onTap: () => setState(() {
-            page = SearchScreen(userModel: widget.userModel);
+            page = SearchScreen();
           }),
         ),
         ListTile(
           title: const Text('Shopping Cart'),
           onTap: () => setState(() {
-            page = Placeholder();
+            page = ShoppingCart();
           }),
         ),
         ListTile(
           title: Text('Sign Out'),
-          onTap: () => authService.signOut(),
+          onTap: () =>
+              Provider.of<UserNotifier>(context, listen: false).signOut(),
         ),
       ])),
       body: page,

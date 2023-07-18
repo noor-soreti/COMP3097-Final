@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/src/models.dart';
+import 'package:mobile_app/src/user_notifier.dart';
+import 'package:provider/provider.dart';
 
-import '../src/user_service.dart';
+import '../service/user_service.dart';
 
 class EditForm extends StatefulWidget {
   final User user;
@@ -30,6 +32,8 @@ class _EditFormState extends State<EditForm> {
   @override
   Widget build(BuildContext context) {
     User u;
+    var appState = context.watch<UserNotifier>();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Profile'),
@@ -85,6 +89,12 @@ class _EditFormState extends State<EditForm> {
                               ),
                               TextButton(
                                 onPressed: () {
+                                  // _service.update(u);
+                                  // appState.update(u);
+                                  Provider.of<UserNotifier>(context,
+                                          listen: false)
+                                      .update(u);
+
                                   var nav = Navigator.of(context);
                                   nav.pop();
                                   nav.pop();
@@ -94,7 +104,6 @@ class _EditFormState extends State<EditForm> {
                             ],
                           ),
                         ),
-                        _service.update(u)
                       },
                   child: Text("Update"))
             ],
