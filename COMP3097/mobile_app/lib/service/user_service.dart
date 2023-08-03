@@ -65,5 +65,18 @@ class UserService {
     });
   }
 
-  Future deleteProduct(Product p) async {}
+  Future delete(User user) async {
+    late String id;
+    await db.where("email", isEqualTo: user.email).get().then((value) => {
+          for (var i in value.docs) {id = i.id}
+        });
+
+    return db.doc(id).set({
+      "email": user.email,
+      "firstname": user.firstname,
+      "lastname": user.lastname,
+      "product": user.product
+      // "product": user.product as List<Product>
+    }, SetOptions(merge: true));
+  }
 }

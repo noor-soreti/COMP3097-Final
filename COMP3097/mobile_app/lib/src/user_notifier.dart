@@ -47,9 +47,8 @@ class UserNotifier extends ChangeNotifier {
       }
     } else {
       p.quantity = 1;
-      print(p.quantity);
       product.add(p);
-      print('eet');
+      print("addProduct: ${p.quantity}");
     }
 
     // product.add(p);
@@ -67,13 +66,30 @@ class UserNotifier extends ChangeNotifier {
   }
 
   Future deleteProduct(Product p) async {
-    print(p.id);
     List<Product> product = [];
-    // var u = await _userService.readUserDataWithList(_currentUser.email);
+
+    var u = await _userService.readUserDataWithList(_currentUser.email);
+    _currentUser.product!.clear();
+
     // for (var i in u['product']) {
-    //   Product one = Product(id: i['id'], name: i['name'], price: i['price']);
-    //   product.add(one);
+    //   print(i['name']);
     // }
+
+    for (var i in u['product']) {
+      if (i['name'] != p.name) {
+        Product one = Product(
+            id: i['id'],
+            name: i['name'],
+            price: i['price'],
+            quantity: i['quantity']);
+        _currentUser.product!.add(one);
+      }
+    }
+
+    // _currentUser.product = product;
+
+    await _userService.updateCart(_currentUser);
+    notifyListeners();
   }
 
   signOut() {

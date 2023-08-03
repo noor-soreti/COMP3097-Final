@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:mobile_app/service/user_service.dart';
 import 'package:mobile_app/src/models.dart';
 import 'package:mobile_app/src/user_notifier.dart';
 import 'package:provider/provider.dart';
@@ -43,9 +40,6 @@ class _ShoppingCartState extends State<ShoppingCart> {
 
   @override
   Widget build(BuildContext context) {
-
-    
-
     return Consumer<UserNotifier>(
       builder: (context, value, child) {
         return Column(

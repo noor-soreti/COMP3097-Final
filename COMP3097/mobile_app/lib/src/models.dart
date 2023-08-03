@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 class Product {
   int id;
   String name;
@@ -15,10 +13,10 @@ class Product {
   factory Product.fromJSON(Map<String, Object?> json) {
     // if (json['quantity'] != null) {
     return Product(
-        id: json['id'] as int,
-        name: json['name'] as String,
-        price: json['price'] as double,
-        quantity: json['quantity'] as int);
+      id: json['id'] as int,
+      name: json['name'] as String,
+      price: json['price'] as double,
+    );
     // }
     // return Product(
     //     id: json['id'] as int,

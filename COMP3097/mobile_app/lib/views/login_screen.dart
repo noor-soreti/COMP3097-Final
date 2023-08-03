@@ -39,6 +39,7 @@ class _LoginPageState extends State<LoginPage> {
       'email': data.name,
       'firstname': data.additionalSignupData!['firstname'],
       'lastname': data.additionalSignupData!['lastname'],
+      'product': []
     };
 
     await _service.addUser(newUser);

@@ -34,14 +34,13 @@ class _ProfileState extends State<Profile> {
             height: 55,
           ),
           CircleAvatar(
-            backgroundColor: Color.fromARGB(255, 244, 244, 244),
-            radius: 70,
-            child: Icon(
-              Icons.person,
-              color: Color(0xffCCCCCC),
-              size: 50,
-            ),
-          ),
+              radius: 70,
+              child: CircleAvatar(
+                radius: 70,
+                backgroundColor: Color.fromARGB(255, 244, 244, 244),
+                backgroundImage: NetworkImage(
+                    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
+              )),
           Expanded(
             child: ListView(
               padding: const EdgeInsets.only(top: 80, left: 20, right: 20),
