@@ -21,12 +21,11 @@ class _ShoppingCartState extends State<ShoppingCart> {
 
   @override
   void initState() {
-    test();
-
+    getUserCart();
     super.initState();
   }
 
-  test() async {
+  getUserCart() async {
     var i =
         await Provider.of<UserNotifier>(context, listen: false).getUserCart();
 
@@ -34,6 +33,13 @@ class _ShoppingCartState extends State<ShoppingCart> {
       Product p = Product(id: t['id'], name: t['name'], price: t['price']);
       productList.add(p);
     }
+
+    for (var i in productList) {
+      subTotal += i.price;
+    }
+
+    tax = subTotal * 0.13;
+    total = tax + subTotal;
 
     setState(() {});
   }
@@ -65,25 +71,25 @@ class _ShoppingCartState extends State<ShoppingCart> {
                 children: [
                   Row(
                     children: [
-                      Text("SUBTOTAL",
+                      Text("TOTAL",
                           style: TextStyle(
                               fontSize: 15, fontWeight: FontWeight.w700)),
                       SizedBox(
-                        width: 120,
+                        width: 167,
                       ),
-                      Text("\$${subTotal.toStringAsFixed(2)}",
+                      Text("\$${total.toStringAsFixed(2)}",
                           style: TextStyle(fontSize: 15)),
                     ],
                   ),
                   Row(
                     children: [
-                      Text("TOTAL",
+                      Text("SUBTOTAL",
                           style: TextStyle(
                               fontSize: 12, fontWeight: FontWeight.w300)),
                       SizedBox(
-                        width: 167,
+                        width: 120,
                       ),
-                      Text("\$${total.toStringAsFixed(2)}"),
+                      Text("\$${subTotal.toStringAsFixed(2)}"),
                     ],
                   ),
                   Row(
